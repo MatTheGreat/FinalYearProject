@@ -1,0 +1,8 @@
+﻿  CoreLoop.cpp
+c:\users\matthew\desktop\new folder (10)\latest\finalyearproject\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(35): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+c:\users\matthew\desktop\new folder (10)\latest\finalyearproject\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(109): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\matthew\desktop\new folder (10)\latest\finalyearproject\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(53): warning C4101: 'from': unreferenced local variable
+c:\users\matthew\desktop\new folder (10)\latest\finalyearproject\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(53): warning C4101: 'to': unreferenced local variable
+c:\users\matthew\desktop\new folder (10)\latest\finalyearproject\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(53): warning C4101: 'weight': unreferenced local variable
+c:\users\matthew\desktop\new folder (10)\latest\finalyearproject\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(130): warning C4018: '<': signed/unsigned mismatch
+  FinalYearProject.vcxproj -> C:\Users\Matthew\Desktop\New folder (10)\latest\FinalYearProject\FinalYearProject\FinalYearProject\Debug\FinalYearProject.exe
