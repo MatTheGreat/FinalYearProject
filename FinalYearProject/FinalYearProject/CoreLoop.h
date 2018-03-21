@@ -10,7 +10,9 @@
 #include <utility>
 
 #include "Outputter.h"
+#include "AlgorithimPath.h"
 #include "MapDisplay.h"
+
 
 class CoreLoop
 {
@@ -21,6 +23,10 @@ public:
 	void Draw();
 	void Loop();
 	void RunAStar(Graph graph);
+	void OutputPathToConsole(std::vector<Node *> path);
+	void OutputToCSVFile(int startPoint, int endPoint, int timeTaken, int nodesOpened);
+	void DisplayPath();
+	void GenerateMap();
 
 	bool isRunning;
 
@@ -29,11 +35,14 @@ private:
 	Graph graph;
 	MapDisplay display;
 	sf::Clock clock;
-	int timeTaken = 0;
-	std::vector<int> * openedNodes;
+	int timeTaken;
+	//std::vector<int> * openedNodes;
 	bool displayPath;
 	int displayTimer;
-	int openedNodesIndex;
-	std::vector<Node *> thepath;
+	int pathIndex;
+	Outputter * output;
+	int pathTimer;
+	//std::vector<Node *> thepath;
+	std::vector<AlgorithimPath> m_Paths;
 };
 

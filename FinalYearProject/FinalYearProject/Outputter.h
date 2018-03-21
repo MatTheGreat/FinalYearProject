@@ -9,12 +9,6 @@ public:
 	Outputter();
 	~Outputter();
 
-	//name of file to be created by logger when logging
-	std::string fileName;
-
-	//variable used to output to csv file
-	std::ofstream csvFile;
-
 	bool isFirstLog;
 
 	void firstLog();
@@ -22,6 +16,10 @@ public:
 	void logNewLine();
 
 private:
+	//name of file to be created by logger when logging
+	std::string fileName;
 
+	//variable used to output to csv file
+	std::ofstream csvFile;
 };
 

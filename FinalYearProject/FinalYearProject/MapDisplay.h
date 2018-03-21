@@ -10,6 +10,7 @@ public:
 
 	void Render(sf::RenderWindow* window);
 	void ChangeTile(int index, std::string tileType);
+	std::vector<sf::Sprite*>* getTiles();
 
 private:
 	std::vector<sf::Sprite*> tiles;

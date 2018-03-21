@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AlgorithimPath.cpp" />
     <ClCompile Include="Arc.cpp" />
     <ClCompile Include="FinalYearProject.cpp" />
     <ClCompile Include="CoreLoop.cpp" />
@@ -156,6 +157,7 @@
     <ClCompile Include="Outputter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AlgorithimPath.h" />
     <ClInclude Include="Arc.h" />
     <ClInclude Include="CoreLoop.h" />
     <ClInclude Include="Graph.h" />

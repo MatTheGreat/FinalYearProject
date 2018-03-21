@@ -229,6 +229,7 @@ void Graph::ucs(Node * pStart, Node * pDest, std::vector<Node*>& path)
 
 void Graph::aStar(Node * pStart, Node * pDest, std::vector<Node*>& path , std::vector<int> * openedNodes)
 {
+	ResetGraph();
 	//g(n) = nodeQueue.top()->data().second
 	//h(n) = estimated cost
 	//f(n) = g(n)+h(n)
@@ -351,6 +352,14 @@ void Graph::fraStarInitializeState(Node * currentNode, int currentIteration)
 		currentNode->weight = std::numeric_limits<int>::max() - 10000;
 		currentNode->generatediteration = currentIteration;
 		currentNode->m_marked = false;
+	}
+}
+
+void Graph::ResetGraph()
+{
+	for (int i = 0; i < nodes.size(); i++)
+	{
+		nodes.at(i)->ResetNode();
 	}
 }
 

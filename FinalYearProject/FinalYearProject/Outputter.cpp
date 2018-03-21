@@ -3,6 +3,8 @@
 Outputter::Outputter()
 {
 	isFirstLog = true;
+	fileName = "";
+	csvFile = std::ofstream();
 }
 
 Outputter::~Outputter()

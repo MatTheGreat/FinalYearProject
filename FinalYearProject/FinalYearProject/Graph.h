@@ -32,6 +32,7 @@ public:
 	void aStar(Node* pStart, Node* pDest, std::vector<Node *>& path, std::vector<int> * openedNodes);
 	void fraStar(Node* pStart, Node* pDest, std::vector<Node *>& path);
 	void fraStarInitializeState(Node * currentNode, int currentIteration);
+	void ResetGraph();
 
 	bool NodeExists(std::string id);
 	bool NodeExists(int index);

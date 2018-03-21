@@ -61,3 +61,12 @@ void Node::removeArc(Node * pNode)
 	}
 }
 
+void Node::ResetNode()
+{
+	m_previous = nullptr;
+	m_marked = false;
+	weight = std::numeric_limits<int>::max() - 10000;
+	m_estDistToDest = std::numeric_limits<int>::max() - 10000;
+	m_removed = false;
+}
+

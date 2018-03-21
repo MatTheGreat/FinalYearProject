@@ -57,5 +57,10 @@ void MapDisplay::ChangeTile(int index ,std::string tileType)
 	}
 }
 
+std::vector<sf::Sprite*>* MapDisplay::getTiles()
+{
+	return & tiles;
+}
+
 
 

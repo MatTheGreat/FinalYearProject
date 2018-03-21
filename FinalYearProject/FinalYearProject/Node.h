@@ -16,6 +16,7 @@ public:
 	Arc* GetArc(Node* pNode);
 	void AddArc(Node* pNode, int weight);
 	void removeArc(Node* pNode);
+	void ResetNode();
 
 	std::string id = "NULL";
 	int weight;
