@@ -331,12 +331,12 @@ bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 	setHeuristic(pStart, pDest);
 	std::vector<Node*> open;
 	std::vector<Node*> closed;
-	std::vector<Node*> pred;
-	std::vector<Node*> succ;
 
 	int iteration = 1;
 	//std::vector<Node*> open;
 	Node * start = pStart;
+	Node * prevStart = pStart;
+	Node * goal = pDest;
 
 	clearMarks();
 	for (int index = 0; index < nodes.size(); index++)
@@ -349,13 +349,43 @@ bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 	start->m_marked = true;
 
 	open.push_back(start);
-	while (start != pDest)
+	while (start != goal)
 	{
-		if (fraComputeCostMinimalPath(open))
+		if (fraComputeCostMinimalPath(open,iteration,start,goal) == false)
 		{
+			//No path found
 			return false;
 		}
+		bool openListComplete = false;
+		while (TestClosedList(goal,start))
+		{
+			//follow path from start to goal
+		}
+		if (start == goal)
+		{
+			//reached destination
+			return true;
+		}
+		prevStart = start;
+		//set new start
+		start;
 
+		//set new goal
+		goal;
+
+		if (start == prevStart)
+		{
+			//Step2
+			fraStep2(start, prevStart, open);
+			openListComplete = true;
+		}
+		if (openListComplete == false)
+		{
+			iteration++;
+		}
+		//Step 4
+
+	}
 		/*
 		if (NOT ComputeCostMinimalPath())
 			return false;
@@ -370,13 +400,11 @@ bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 		goal = the current state of the target;
 		if (start = previous start)
 			Step2();
-		openlist incomplete = true;
+			openlist incomplete = true;
 		if (openlist incomplete)
 			iteration = iteration + 1;
 		Step4();
 		*/
-	}
-	
 }
 
 
@@ -404,7 +432,7 @@ bool Graph::TestClosedList(Node *current, Node * start)
 }
 
 
-bool Graph::fraComputeCostMinimalPath(std::vector<Node*> open, std::vector<Node*> pred,std::vector<Node*> succ, int currentIteration, Node* goal)
+bool Graph::fraComputeCostMinimalPath(std::vector<Node*> open, int currentIteration,Node* start, Node* goal)
 {
 	while (open.size() != 0)
 	{
@@ -416,31 +444,37 @@ bool Graph::fraComputeCostMinimalPath(std::vector<Node*> open, std::vector<Node*
 
 		current->m_marked = true;
 
-		for (int n = 0; n < succ.size(); n++)
-		{
-			fraStarInitializeState(succ.at(n),currentIteration);
-			if (nullptr != current->GetArc(succ.at(n)))
-			{
-				int dist = current->weight + current->GetArc(succ.at(n))->getWeight();
-				if (succ.at(n)->weight > dist)
-				{
-					current->weight = dist;
-					succ.at(n)->m_previous = current;
+		std::list<Arc>::const_iterator iter = current->m_arcList.begin();
+		std::list<Arc>::const_iterator endIter = current->m_arcList.end();
 
-					if (NodeInVector(succ.at(n),open) == true)
+		for (; iter != endIter; iter++)
+		{
+			if (false == TestClosedList(iter->getDestNode(), start))
+			{
+				fraStarInitializeState(iter->getDestNode(), currentIteration);
+				if (nullptr != current->GetArc(iter->getDestNode()))
+				{
+					int dist = current->weight + current->GetArc(iter->getDestNode())->getWeight();
+					if (iter->getDestNode()->weight > dist)
 					{
-						open.push_back(succ.at(n));
+						current->weight = dist;
+						iter->getDestNode()->m_previous = current;
+
+						if (NodeInVector(iter->getDestNode(), open) == true)
+						{
+							open.push_back(iter->getDestNode());
+						}
+					}
+					if (current == goal)
+					{
+						return true;
 					}
 				}
-				if (current == goal)
+				else
 				{
-					return true;
+					std::cout << "ERROR ARC NOT FOUND" << std::endl;
+					//arc not found
 				}
-			}
-			else
-			{
-				std::cout << "ERROR ARC NOT FOUND" << std::endl;
-				//arc not found
 			}
 		}
 		return false;
@@ -461,6 +495,82 @@ bool Graph::fraComputeCostMinimalPath(std::vector<Node*> open, std::vector<Node*
 			if (current == goal)
 				return true;
 	return false
+	*/
+}
+
+void Graph::fraStep2(Node * start , Node * prevStart, std::vector<Node*> open)
+{
+	start->m_previous = nullptr;
+	std::list<Arc>::const_iterator iter = prevStart->m_arcList.begin();
+	std::list<Arc>::const_iterator endIter = prevStart->m_arcList.end();
+	for (; iter != endIter; iter++)
+	{
+		if (iter->getDestNode()->m_previous != start)
+		{
+			iter->getDestNode()->m_previous = nullptr;
+			if (NodeInVector(iter->getDestNode(), open) == true)
+			{
+				std::swap(open.at(NodeInVectorIndex(iter->getDestNode(), open)), open.back());
+				open.pop_back();
+			}
+		}
+	}
+	/*
+procedure Step2()
+   parent(start) = NULL;
+for each in node in the search tree rooted at previous start but not the subtree rooted at start
+ 	parent(node) = NULL;
+ 	if (node in OPEN)
+ 		OPEN.remove(node)
+	*/
+}
+
+void Graph::fraStep4( std::vector<Node*> open, Node * start, int currentIteration)
+{
+	//go through every node neighbouring nodes to open
+	for (int i = 0; i < open.size(); i++)
+	{
+		std::list<Arc>::const_iterator iter = open.at(i)->m_arcList.begin();
+		std::list<Arc>::const_iterator endIter = open.at(i)->m_arcList.end();
+		for (; iter != endIter; iter++)
+		{
+			if (TestClosedList(iter->getDestNode(),start) == true && NodeInVector(iter->getDestNode(),open)== false && iter->getDestNode()->m_marked == true)
+			{
+				open.push_back(iter->getDestNode());
+			}
+		}
+	}
+	for (int i = 0; i < open.size(); i++)
+	{
+		fraStarInitializeState(open.at(i),currentIteration);
+		std::list<Arc>::const_iterator iter = open.at(i)->m_arcList.begin();
+		std::list<Arc>::const_iterator endIter = open.at(i)->m_arcList.end();
+		for (; iter != endIter; iter++)
+		{
+			if (iter->getDestNode()->m_marked == true)
+			{
+				int dist = iter->getDestNode()->weight + open.at(i)->GetArc(iter->getDestNode())->getWeight();
+				if (TestClosedList(iter->getDestNode(), start) == true && open.at(i)->weight > dist)
+				{
+					open.at(i)->weight = dist;
+					open.at(i)->m_previous = iter->getDestNode();
+				}
+			}
+		}
+	}
+
+	/*
+procedure Step4()
+  for each node in graph on relevant part of outer perimeter of CLOSED list
+ 	if (node not in OPEN AND neighbour in Pred(s) : TestClosedList(neighbour))
+ 		OPEN.add(node)
+  for each node in OPEN
+ 	InitializeState(node);
+  for each node in OPEN
+ 	for each n in Pred(s)
+ 		if (TestClosedList(n) AND g(node) >g(n) + distanceFrom(n, node))
+ 			g(node) = g(n) + distanceFrom(n, node);
+ 			parent(node) = n;
 	*/
 }
 
@@ -518,6 +628,18 @@ bool Graph::NodeInVector(Node* node ,std::vector<Node*> nodeVector)
 		}
 	}
 	return false;
+}
+
+int Graph::NodeInVectorIndex(Node * node, std::vector<Node*> nodeVector)
+{
+	for (int n = 0; n < nodeVector.size(); n++)
+	{
+		if (node == nodeVector.at(n))
+		{
+			return n;
+		}
+	}
+	return -1;
 }
 
 /*

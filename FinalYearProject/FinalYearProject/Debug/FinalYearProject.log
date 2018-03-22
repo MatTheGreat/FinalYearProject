@@ -1,9 +1,10 @@
 ﻿  CoreLoop.cpp
-c:\users\matthew\desktop\fyp\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(65): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\matthew\desktop\fyp\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(72): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(76): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(123): warning C4101: 'from': unreferenced local variable
-c:\users\matthew\desktop\fyp\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(123): warning C4101: 'to': unreferenced local variable
-c:\users\matthew\desktop\fyp\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(123): warning C4101: 'weight': unreferenced local variable
-c:\users\matthew\desktop\fyp\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(175): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-  FinalYearProject.vcxproj -> C:\Users\Matthew\Desktop\FYP\FinalYearProject\FinalYearProject\Debug\FinalYearProject.exe
+c:\users\gameuser\desktop\fyp\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(65): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\gameuser\desktop\fyp\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(70): warning C4018: '<': signed/unsigned mismatch
+c:\users\gameuser\desktop\fyp\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(74): warning C4018: '<': signed/unsigned mismatch
+c:\users\gameuser\desktop\fyp\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(121): warning C4101: 'from': unreferenced local variable
+c:\users\gameuser\desktop\fyp\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(121): warning C4101: 'to': unreferenced local variable
+c:\users\gameuser\desktop\fyp\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(121): warning C4101: 'weight': unreferenced local variable
+c:\users\gameuser\desktop\fyp\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(173): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+  FinalYearProject.vcxproj -> C:\Users\gameuser\Desktop\FYP\FinalYearProject\FinalYearProject\Debug\FinalYearProject.exe
+  FinalYearProject.vcxproj -> C:\Users\gameuser\Desktop\FYP\FinalYearProject\FinalYearProject\Debug\FinalYearProject.pdb (Partial PDB)
