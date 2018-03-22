@@ -10,6 +10,33 @@
 class Node;
 class Arc;
 
+
+class NodeSearchEstimateComparer
+{
+public:
+	//Compares nodes f(n) values
+	bool operator()(Node * n1, Node * n2)
+	{
+		//f(n) = h(n) + g(n)
+		int p1 = n1->m_estDistToDest + n1->weight;
+		int p2 = n2->m_estDistToDest + n2->weight;
+		return p1 > p2;
+	}
+};
+
+
+class NodeSearchCostComparer
+{
+public:
+	//Compares nodes weight/distance values
+	bool operator()(Node * n1, Node * n2)
+	{
+		int p1 = n1->weight;
+		int p2 = n2->weight;
+		return p1 > p2;
+	}
+};
+
 class Graph
 {
 private:
@@ -30,40 +57,22 @@ public:
 	void clearMarks();
 	void ucs(Node* pStart, Node* pDest, std::vector<Node *>& path);
 	void aStar(Node* pStart, Node* pDest, std::vector<Node *>& path, std::vector<int> * openedNodes);
-	void fraStar(Node* pStart, Node* pDest, std::vector<Node *>& path);
+	bool fraStar(Node* pStart, Node* pDest, std::vector<Node *>& path);
 	void fraStarInitializeState(Node * currentNode, int currentIteration);
+	bool fraComputeCostMinimalPath(std::vector<Node*> open, std::vector<Node*> pred, std::vector<Node*> succ, int currentIteration , Node* goal);
+	bool TestClosedList(Node *current, Node * start);
+	void setHeuristic(Node * pStart, Node * pDest);
 	void ResetGraph();
+	Node* GetLowestFValue(std::vector<Node*> nodes);
+	int GetLowestFValueIndex(std::vector<Node*> nodes);
+	bool NodeInVector(Node* node ,std::vector<Node*> nodeVector);
 
 	bool NodeExists(std::string id);
 	bool NodeExists(int index);
 
 	int GetIndex(std::string id);
 
-	class NodeSearchEstimateComparer
-	{
-	public:
-		//Compares nodes f(n) values
-		bool operator()(Node * n1, Node * n2)
-		{
-			//f(n) = h(n) + g(n)
-			int p1 = n1->m_estDistToDest + n1->weight;
-			int p2 = n2->m_estDistToDest + n2->weight;
-			return p1 > p2;
-		}
-	};
 
-
-	class NodeSearchCostComparer
-	{
-	public:
-		//Compares nodes weight/distance values
-		bool operator()(Node * n1, Node * n2)
-		{
-			int p1 = n1->weight;
-			int p2 = n2->weight;
-			return p1 > p2;
-		}
-	};
 
 };
 

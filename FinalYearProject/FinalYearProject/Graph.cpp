@@ -227,33 +227,37 @@ void Graph::ucs(Node * pStart, Node * pDest, std::vector<Node*>& path)
 	}
 }
 
+void Graph::setHeuristic(Node * pStart, Node * pDest)
+{
+	//run UCS in opposite direction
+	std::vector<Node*> ucsPath;
+	//ucs(pDest, pStart, ucsPath);
+	ucs(pDest, pStart, ucsPath);
+
+	for (int index = 0; index < nodes.size(); index++)
+	{
+		if (nodes.at(index) != nullptr)
+		{
+			nodes.at(index)->m_estDistToDest = nodes.at(index)->weight*0.9f;
+			nodes.at(index)->weight = std::numeric_limits<int>::max() - 10000;
+			std::cout << nodes.at(index)->id << " " << nodes.at(index)->m_estDistToDest << std::endl;
+
+			nodes.at(index)->m_marked = false;
+			nodes.at(index)->m_removed = false;
+		}
+	}
+}
+
 void Graph::aStar(Node * pStart, Node * pDest, std::vector<Node*>& path , std::vector<int> * openedNodes)
 {
 	ResetGraph();
-	//g(n) = nodeQueue.top()->data().second
+	//g(n) = nodeQueue.top()->weight
 	//h(n) = estimated cost
 	//f(n) = g(n)+h(n)
 
 	if (pStart != 0)
 	{
-		//run UCS in opposite direction
-		std::vector<Node*> ucsPath;
-		//ucs(pDest, pStart, ucsPath);
-		ucs(pDest, pStart, ucsPath);
-
-
-		for (int index = 0; index < nodes.size(); index++)
-		{
-			if (nodes.at(index) != nullptr)
-			{
-				nodes.at(index)->m_estDistToDest = nodes.at(index)->weight*0.9f;
-				nodes.at(index)->weight = std::numeric_limits<int>::max() - 10000;
-				std::cout << nodes.at(index)->id << " " << nodes.at(index)->m_estDistToDest << std::endl;
-
-				nodes.at(index)->m_marked = false;
-				nodes.at(index)->m_removed = false;
-			}
-		}
+		setHeuristic(pStart,pDest);
 		std::priority_queue<Node*, std::vector<Node*>, NodeSearchEstimateComparer> nodeQueue;
 
 		//Add starting node to queue and set its distance and that it has been visited
@@ -266,6 +270,7 @@ void Graph::aStar(Node * pStart, Node * pDest, std::vector<Node*>& path , std::v
 			openedNodes->push_back(GetIndex(nodeQueue.top()->id));
 			std::list<Arc>::const_iterator iter = nodeQueue.top()->m_arcList.begin();
 			std::list<Arc>::const_iterator endIter = nodeQueue.top()->m_arcList.end();
+
 			for (; iter != endIter; iter++)
 			{
 				if ((*iter).getDestNode()->m_previous != nodeQueue.top())
@@ -321,10 +326,16 @@ void Graph::aStar(Node * pStart, Node * pDest, std::vector<Node*>& path , std::v
 
 
 
-void Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
+bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 {
-	int iteration = 1;
+	setHeuristic(pStart, pDest);
 	std::vector<Node*> open;
+	std::vector<Node*> closed;
+	std::vector<Node*> pred;
+	std::vector<Node*> succ;
+
+	int iteration = 1;
+	//std::vector<Node*> open;
 	Node * start = pStart;
 
 	clearMarks();
@@ -340,8 +351,32 @@ void Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 	open.push_back(start);
 	while (start != pDest)
 	{
+		if (fraComputeCostMinimalPath(open))
+		{
+			return false;
+		}
 
+		/*
+		if (NOT ComputeCostMinimalPath())
+			return false;
+		openlist incomplete : = false;
+		while (TestClosedList(goal))
+			while (target is on path from start to goal and not caught)
+				follow cost - minimal path from start to goal;
+		if (target is caught)
+			return true;
+		previous start = start;
+		start = the current state of the hunter;
+		goal = the current state of the target;
+		if (start = previous start)
+			Step2();
+		openlist incomplete = true;
+		if (openlist incomplete)
+			iteration = iteration + 1;
+		Step4();
+		*/
 	}
+	
 }
 
 
@@ -355,12 +390,134 @@ void Graph::fraStarInitializeState(Node * currentNode, int currentIteration)
 	}
 }
 
+bool Graph::TestClosedList(Node *current, Node * start)
+{
+	
+	if (current == start || current->m_marked == true && current->m_previous == NULL)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+
+bool Graph::fraComputeCostMinimalPath(std::vector<Node*> open, std::vector<Node*> pred,std::vector<Node*> succ, int currentIteration, Node* goal)
+{
+	while (open.size() != 0)
+	{
+		Node * current = GetLowestFValue(open);
+		int index = GetLowestFValueIndex(open);
+
+		std::swap(open.at(index), open.back());
+		open.pop_back();
+
+		current->m_marked = true;
+
+		for (int n = 0; n < succ.size(); n++)
+		{
+			fraStarInitializeState(succ.at(n),currentIteration);
+			if (nullptr != current->GetArc(succ.at(n)))
+			{
+				int dist = current->weight + current->GetArc(succ.at(n))->getWeight();
+				if (succ.at(n)->weight > dist)
+				{
+					current->weight = dist;
+					succ.at(n)->m_previous = current;
+
+					if (NodeInVector(succ.at(n),open) == true)
+					{
+						open.push_back(succ.at(n));
+					}
+				}
+				if (current == goal)
+				{
+					return true;
+				}
+			}
+			else
+			{
+				std::cout << "ERROR ARC NOT FOUND" << std::endl;
+				//arc not found
+			}
+		}
+		return false;
+	}
+	/*
+	while (OPEN not empty)
+ 		current = node with smallest f(n)
+		OPEN.remove(current)
+ 		expanded(current) = true;
+ 		for each node in Succ(s)
+ 			if (NOT TestClosedList(node))
+ 			InitializeState(node);
+ 			if (g(node) >g(current) + distanceFrom(current, node))
+ 				g(current) = g(current) + distanceFrom(current, node);
+ 				parent(node) = current;
+ 				if (node not in OPEN)
+ 					OPEN.add(node)
+			if (current == goal)
+				return true;
+	return false
+	*/
+}
+
+
+
 void Graph::ResetGraph()
 {
 	for (int i = 0; i < nodes.size(); i++)
 	{
 		nodes.at(i)->ResetNode();
 	}
+}
+
+Node * Graph::GetLowestFValue(std::vector<Node*> nodes)
+{
+	Node * lowestF = nodes.at(0);
+	for (int i = 0; i < nodes.size(); i++)
+	{
+			//f(n) = h(n) + g(n)
+			int p1 = lowestF->m_estDistToDest + lowestF->weight;
+			int p2 = nodes.at(i)->m_estDistToDest + nodes.at(i)->weight;
+			if (p1 > p2)
+			{
+				lowestF = nodes.at(i);
+			}
+	}
+	return lowestF;
+}
+
+int Graph::GetLowestFValueIndex(std::vector<Node*> nodes)
+{
+	Node * lowestF = nodes.at(0);
+	int lowestIndex = 0;
+	for (int i = 0; i < nodes.size(); i++)
+	{
+		//f(n) = h(n) + g(n)
+		int p1 = lowestF->m_estDistToDest + lowestF->weight;
+		int p2 = nodes.at(i)->m_estDistToDest + nodes.at(i)->weight;
+		if (p1 > p2)
+		{
+			lowestF = nodes.at(i);
+			lowestIndex = i;
+		}
+	}
+	return lowestIndex;
+}
+
+bool Graph::NodeInVector(Node* node ,std::vector<Node*> nodeVector)
+{
+	for (int n = 0; n < nodeVector.size(); n++)
+	{
+		if (node == nodeVector.at(n))
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 /*
