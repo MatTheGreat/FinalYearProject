@@ -11,12 +11,12 @@ void CoreLoop::RunAStar(Graph graph)
 	int end = ENDPOINT;
 	output->firstLog();
 
-	m_Paths.push_back(AlgorithimPath(start,end));
+	m_Paths.push_back(AlgorithimPath(start, end));
 
 	// Now traverse the graph.
 	clock.restart();
 
-	graph.aStar(graph.nodes.at(start), graph.nodes.at(end), m_Paths.at(m_Paths.size() - 1).path, m_Paths.at(m_Paths.size()-1).opendedNodes);
+	graph.aStar(graph.nodes.at(start), graph.nodes.at(end), m_Paths.at(m_Paths.size() - 1).path, m_Paths.at(m_Paths.size() - 1).opendedNodes);
 
 	timeTaken = clock.getElapsedTime().asMilliseconds();
 
@@ -41,7 +41,7 @@ void CoreLoop::RunAStar(Graph graph)
 		OutputPathToConsole(m_Paths.at(m_Paths.size() - 1).path);
 		OutputToCSVFile(m_Paths.at(m_Paths.size() - 1).startPointIndex, m_Paths.at(m_Paths.size() - 1).endPointIndex, timeTaken, m_Paths.at(m_Paths.size() - 1).opendedNodes->size());
 
-		Node * newStart = m_Paths.at(m_Paths.size() - 1).path.at(m_Paths.at(m_Paths.size() - 1).path.size()-2);
+		Node * newStart = m_Paths.at(m_Paths.size() - 1).path.at(m_Paths.at(m_Paths.size() - 1).path.size() - 2);
 		start = graph.GetIndex(newStart->id);
 	}
 

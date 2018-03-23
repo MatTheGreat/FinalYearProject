@@ -330,7 +330,7 @@ bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 {
 	setHeuristic(pStart, pDest);
 	std::vector<Node*> open;
-	std::vector<Node*> closed;
+	//std::vector<Node*> closed;
 
 	int iteration = 1;
 	//std::vector<Node*> open;
@@ -384,6 +384,7 @@ bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 			iteration++;
 		}
 		//Step 4
+		fraStep4(open, start, iteration);
 
 	}
 		/*
@@ -452,6 +453,7 @@ bool Graph::fraComputeCostMinimalPath(std::vector<Node*> open, int currentIterat
 			if (false == TestClosedList(iter->getDestNode(), start))
 			{
 				fraStarInitializeState(iter->getDestNode(), currentIteration);
+
 				if (nullptr != current->GetArc(iter->getDestNode()))
 				{
 					int dist = current->weight + current->GetArc(iter->getDestNode())->getWeight();
