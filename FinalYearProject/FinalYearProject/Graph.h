@@ -59,7 +59,7 @@ public:
 	void aStar(Node* pStart, Node* pDest, std::vector<Node *>& path, std::vector<int> * openedNodes);
 	bool fraStar(Node* pStart, Node* pDest, std::vector<Node *>& path);
 	void fraStarInitializeState(Node * currentNode, int currentIteration);
-	bool fraComputeCostMinimalPath(std::vector<Node*> open, int currentIteration ,Node* start, Node* goal);
+	bool fraComputeCostMinimalPath(std::vector<Node*> open, int currentIteration ,Node* start, Node* goal, std::vector<Node *>& path);
 	void fraStep2(Node * start, Node * prevStart, std::vector<Node*> open);
 	void fraStep4(std::vector<Node*> open, Node * start, int currentIteration);
 	bool TestClosedList(Node *current, Node * start);

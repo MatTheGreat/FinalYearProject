@@ -351,7 +351,7 @@ bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 	open.push_back(start);
 	while (start != goal)
 	{
-		if (fraComputeCostMinimalPath(open,iteration,start,goal) == false)
+		if (fraComputeCostMinimalPath(open,iteration,start,goal,path) == false)
 		{
 			//No path found
 			return false;
@@ -360,6 +360,7 @@ bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 		while (TestClosedList(goal,start))
 		{
 			//follow path from start to goal
+			start = path.at(path.size() - 2);
 		}
 		if (start == goal)
 		{
@@ -368,7 +369,7 @@ bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 		}
 		prevStart = start;
 		//set new start
-		start;
+		start = path.at(path.size() - 2);
 
 		//set new goal
 		goal;
@@ -433,7 +434,7 @@ bool Graph::TestClosedList(Node *current, Node * start)
 }
 
 
-bool Graph::fraComputeCostMinimalPath(std::vector<Node*> open, int currentIteration,Node* start, Node* goal)
+bool Graph::fraComputeCostMinimalPath(std::vector<Node*> open, int currentIteration,Node* start, Node* goal, std::vector<Node *>& path)
 {
 	while (open.size() != 0)
 	{
@@ -452,35 +453,54 @@ bool Graph::fraComputeCostMinimalPath(std::vector<Node*> open, int currentIterat
 		{
 			if (false == TestClosedList(iter->getDestNode(), start))
 			{
+
 				fraStarInitializeState(iter->getDestNode(), currentIteration);
 
-				if (nullptr != current->GetArc(iter->getDestNode()))
-				{
-					int dist = current->weight + current->GetArc(iter->getDestNode())->getWeight();
-					if (iter->getDestNode()->weight > dist)
+					if (nullptr != current->GetArc(iter->getDestNode()))
 					{
-						current->weight = dist;
-						iter->getDestNode()->m_previous = current;
-
-						if (NodeInVector(iter->getDestNode(), open) == true)
+						int dist = current->weight + current->GetArc(iter->getDestNode())->getWeight();
+						if (iter->getDestNode()->weight > dist)
 						{
-							open.push_back(iter->getDestNode());
+							iter->getDestNode()->weight = dist;
+							iter->getDestNode()->m_previous = current;
+
+							if (NodeInVector(iter->getDestNode(), open) == false)
+							{
+								iter->getDestNode()->m_previous = current;
+								open.push_back(iter->getDestNode());
+							}
+
+						}
+						
+						if ((*iter).getDestNode() == goal)
+						{
+							if (dist <= (*iter).getDestNode()->weight)
+							{
+								(*iter).getDestNode()->weight = dist;
+								(*iter).getDestNode()->m_previous = current;
+								path.clear();
+								Node* temp = (*iter).getDestNode();
+								path.push_back((*iter).getDestNode());
+								while (temp != start)
+								{
+									temp = temp->m_previous;
+									path.push_back(temp);
+								}
+								return true;
+							}
 						}
 					}
-					if (current == goal)
+					else
 					{
-						return true;
+						std::cout << "ERROR ARC NOT FOUND" << std::endl;
+						//arc not found
 					}
-				}
-				else
-				{
-					std::cout << "ERROR ARC NOT FOUND" << std::endl;
-					//arc not found
-				}
+
+
 			}
 		}
-		return false;
 	}
+	return false;
 	/*
 	while (OPEN not empty)
  		current = node with smallest f(n)
@@ -490,7 +510,7 @@ bool Graph::fraComputeCostMinimalPath(std::vector<Node*> open, int currentIterat
  			if (NOT TestClosedList(node))
  			InitializeState(node);
  			if (g(node) >g(current) + distanceFrom(current, node))
- 				g(current) = g(current) + distanceFrom(current, node);
+ 				g(node) = g(current) + distanceFrom(current, node);
  				parent(node) = current;
  				if (node not in OPEN)
  					OPEN.add(node)

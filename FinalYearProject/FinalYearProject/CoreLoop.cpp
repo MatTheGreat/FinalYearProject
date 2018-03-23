@@ -166,6 +166,18 @@ void CoreLoop::GenerateMap()
 	}
 }
 
+void CoreLoop::RunFRAStar(Graph graph)
+{
+	int start = STARTPOINT;
+	int end = ENDPOINT;
+
+	m_Paths.push_back(AlgorithimPath(start, end));
+
+	graph.fraStar(graph.nodes.at(start), graph.nodes.at(end), m_Paths.at(m_Paths.size() - 1).path);
+
+	OutputPathToConsole(m_Paths.at(m_Paths.size() - 1).path);
+}
+
 CoreLoop::CoreLoop()
 {
 	isRunning = true;
@@ -186,8 +198,8 @@ CoreLoop::CoreLoop()
 	
 	GenerateMap();
 
-
-	RunAStar(graph);
+	RunFRAStar(graph);
+	//RunAStar(graph);
 
 }
 

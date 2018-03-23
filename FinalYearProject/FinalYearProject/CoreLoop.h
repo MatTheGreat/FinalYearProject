@@ -27,6 +27,7 @@ public:
 	void OutputToCSVFile(int startPoint, int endPoint, int timeTaken, int nodesOpened);
 	void DisplayPath();
 	void GenerateMap();
+	void RunFRAStar(Graph graph);
 
 	bool isRunning;
 
