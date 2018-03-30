@@ -295,7 +295,6 @@ void Graph::aStar(Node * pStart, Node * pDest, std::vector<Node*>& path , std::v
 						(*iter).getDestNode()->m_marked = true;
 						nodeQueue.push((*iter).getDestNode());
 					}
-
 					if ((*iter).getDestNode() == pDest)
 					{
 						if (dist <= (*iter).getDestNode()->weight)
@@ -355,6 +354,17 @@ bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 		{
 			//No path found
 			return false;
+		}
+		else
+		{
+			for (int i = path.size() - 1; i > -1; i--)
+			{
+				std::cout << "Location : " << path.at(i)->id << " Cost : " << path.at(i)->weight << " h(n) : " << path.at(i)->m_estDistToDest << std::endl;
+				if (path.at(i) == nodes.at(NodeInVectorIndex(start,nodes)))
+				{
+					std::cout << std::endl;
+				}
+			}
 		}
 		bool openListComplete = false;
 		while (TestClosedList(goal,start))
@@ -436,15 +446,31 @@ bool Graph::TestClosedList(Node *current, Node * start)
 
 bool Graph::fraComputeCostMinimalPath(std::vector<Node*> open, int currentIteration,Node* start, Node* goal, std::vector<Node *>& path)
 {
+	
+	Node* current;
 	while (open.size() != 0)
 	{
-		Node * current = GetLowestFValue(open);
+		//if (current != nullptr)
+		//{
+		//	if (current->m_previous == nullptr)
+		//	{
+		//		std::cout << "NULL";
+		//	}
+		//}
+
+		current = GetLowestFValue(open);
 		int index = GetLowestFValueIndex(open);
 
-		std::swap(open.at(index), open.back());
-		open.pop_back();
+		//std::swap(open.at(index), open.back());
+		//open.pop_back();
+		int indexInNodes = NodeInVectorIndex(current,nodes);
 
 		current->m_marked = true;
+
+		open.erase(std::remove_if(open.begin(), open.end(), [current](auto nodeInVector) { return current == nodeInVector;  }), open.end());
+
+
+		//nodes;
 
 		std::list<Arc>::const_iterator iter = current->m_arcList.begin();
 		std::list<Arc>::const_iterator endIter = current->m_arcList.end();
@@ -453,52 +479,54 @@ bool Graph::fraComputeCostMinimalPath(std::vector<Node*> open, int currentIterat
 		{
 			if (false == TestClosedList(iter->getDestNode(), start))
 			{
-
 				fraStarInitializeState(iter->getDestNode(), currentIteration);
-
-					if (nullptr != current->GetArc(iter->getDestNode()))
+				if (nullptr != current->GetArc(iter->getDestNode()))
+				{
+					int dist = current->weight + current->GetArc(iter->getDestNode())->getWeight();
+					if (iter->getDestNode()->weight > dist)
 					{
-						int dist = current->weight + current->GetArc(iter->getDestNode())->getWeight();
-						if (iter->getDestNode()->weight > dist)
+						iter->getDestNode()->weight = dist;
+						iter->getDestNode()->previousIndex = indexInNodes;
+						if (NodeInVector(iter->getDestNode(), open) == false)
 						{
-							iter->getDestNode()->weight = dist;
-							iter->getDestNode()->m_previous = current;
-
-							if (NodeInVector(iter->getDestNode(), open) == false)
-							{
-								iter->getDestNode()->m_previous = current;
-								open.push_back(iter->getDestNode());
-							}
-
-						}
-						
-						if ((*iter).getDestNode() == goal)
-						{
-							if (dist <= (*iter).getDestNode()->weight)
-							{
-								(*iter).getDestNode()->weight = dist;
-								(*iter).getDestNode()->m_previous = current;
-								path.clear();
-								Node* temp = (*iter).getDestNode();
-								path.push_back((*iter).getDestNode());
-								while (temp != start)
-								{
-									temp = temp->m_previous;
-									path.push_back(temp);
-								}
-								return true;
-							}
+							open.push_back(iter->getDestNode());
 						}
 					}
-					else
+					//if (current->m_previous == nullptr)
+					//{
+					//	std::cout << current->id << " Error" << std::endl;
+					//}
+					//else
+					//{
+					//	std::cout << current->id << " Ok" << std::endl;
+					//}
+					if (current == goal)
 					{
-						std::cout << "ERROR ARC NOT FOUND" << std::endl;
-						//arc not found
+							path.clear();
+							Node* temp = current;
+							path.push_back(current);
+							while (temp != start)
+							{
+								temp = nodes.at(temp->previousIndex);
+								path.push_back(temp);
+							}
+							return true;
 					}
-
-
+				}
+				else
+				{
+					std::cout << "ERROR ARC NOT FOUND" << std::endl;
+					//arc not found
+				}
+				//if (iter->getDestNode()->m_previous == nullptr)
+				//{
+				//	//NEVER GETS HERE SO POINTER IS OK UP UNTIL THIS POINT
+				//	std::cout << "NULL";
+				//}
 			}
+
 		}
+		//previous pointer breaks HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	}
 	return false;
 	/*

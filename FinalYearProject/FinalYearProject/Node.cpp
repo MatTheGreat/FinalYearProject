@@ -70,3 +70,28 @@ void Node::ResetNode()
 	m_removed = false;
 }
 
+Node::Node(const Node &obj)
+{
+	std::cout << "Copy constructor allocating ptr." << std::endl;
+	*m_previous = *obj.m_previous;
+	id = obj.id;
+	weight = obj.weight;
+	m_arcList = obj.m_arcList;
+	m_marked = obj.m_marked;
+	m_estDistToDest = obj.m_estDistToDest;
+	m_removed = obj.m_removed;
+	generatediteration = obj.generatediteration;
+}
+
+Node& Node::operator=(const Node& other) 
+{
+	*m_previous = *other.m_previous;
+	id = other.id;
+	weight = other.weight;
+	m_arcList = other.m_arcList;
+	m_marked = other.m_marked;
+	m_estDistToDest = other.m_estDistToDest;
+	m_removed = other.m_removed;
+	generatediteration = other.generatediteration;
+	return *this;
+}

@@ -4,6 +4,7 @@
 
 #include <list>
 #include <string>
+#include <iostream>
 
 class Arc;
 
@@ -26,6 +27,7 @@ public:
 	int m_estDistToDest;
 	bool m_removed;
 	int generatediteration;
+	int previousIndex;
 
 	void SetID(std::string newID)
 	{
@@ -39,6 +41,20 @@ public:
 	{
 		weight = newWeight;
 	}
+	Node * getPrevious()
+	{
+		return m_previous;
+	}
+	void SetPrevious(Node *previous)
+	{
+		if (previous != nullptr)
+		{
+			m_previous = previous;
+		}
+	}
+
+	Node(const Node &obj);
+	Node& Node::operator=(const Node& other);
 
 private:
 
