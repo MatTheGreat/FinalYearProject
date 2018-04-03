@@ -8,12 +8,12 @@ c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearp
 c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(237): warning C4018: '<': signed/unsigned mismatch
 c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(241): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(341): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(581): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(593): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(631): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(640): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(657): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(673): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(685): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(420): warning C4715: 'Graph::fraStar': not all control paths return a value
+c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(558): warning C4018: '<': signed/unsigned mismatch
+c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(570): warning C4018: '<': signed/unsigned mismatch
+c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(608): warning C4018: '<': signed/unsigned mismatch
+c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(617): warning C4018: '<': signed/unsigned mismatch
+c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(634): warning C4018: '<': signed/unsigned mismatch
+c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(650): warning C4018: '<': signed/unsigned mismatch
+c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(662): warning C4018: '<': signed/unsigned mismatch
+c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(422): warning C4715: 'Graph::fraStar': not all control paths return a value
   FinalYearProject.vcxproj -> C:\Users\Matthew\Desktop\FYP\latest\FinalYearProject\FinalYearProject\Debug\FinalYearProject.exe

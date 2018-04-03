@@ -357,38 +357,40 @@ bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 		}
 		else
 		{
-			for (int i = path.size() - 1; i > -1; i--)
-			{
-				std::cout << "Location : " << path.at(i)->id << " Cost : " << path.at(i)->weight << " h(n) : " << path.at(i)->m_estDistToDest << std::endl;
-				if (path.at(i) == nodes.at(NodeInVectorIndex(start,nodes)))
-				{
-					std::cout << std::endl;
-				}
-			}
+			//for (int i = path.size() - 1; i > -1; i--)
+			//{
+			//	std::cout << "Location : " << path.at(i)->id << " Cost : " << path.at(i)->weight << " h(n) : " << path.at(i)->m_estDistToDest << std::endl;
+			//	if (path.at(i) == nodes.at(NodeInVectorIndex(start,nodes)))
+			//	{
+			//		std::cout << std::endl;
+			//	}
+			//}
 		}
 		bool openListComplete = false;
+		int pathIndex = path.size() - 2;
 		while (TestClosedList(goal,start))
 		{
 			//follow path from start to goal
-			start = path.at(path.size() - 2);
-		}
-		if (start == goal)
-		{
-			//reached destination
-			return true;
-		}
-		prevStart = start;
-		//set new start
-		start = path.at(path.size() - 2);
+			if (start == goal)
+			{
+				//reached destination
+				return true;
+			}
+			prevStart = start;
 
-		//set new goal
-		goal;
+			//set new start
+			pathIndex--;
+			start = path.at(pathIndex);
 
-		if (start == prevStart)
-		{
-			//Step2
-			fraStep2(start, prevStart, open);
-			openListComplete = true;
+			//set new goal
+			goal;
+
+			if (start != prevStart)
+			{
+				//Step2
+				fraStep2(start, prevStart, open);
+				openListComplete = true;
+			}
 		}
 		if (openListComplete == false)
 		{
@@ -405,14 +407,14 @@ bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 		while (TestClosedList(goal))
 			while (target is on path from start to goal and not caught)
 				follow cost - minimal path from start to goal;
-		if (target is caught)
-			return true;
-		previous start = start;
-		start = the current state of the hunter;
-		goal = the current state of the target;
-		if (start = previous start)
-			Step2();
-			openlist incomplete = true;
+			if (target is caught)
+				return true;
+			previous start = start;
+			start = the current state of the hunter;
+			goal = the current state of the target;
+			if (start != previous start)
+				Step2();
+				openlist incomplete = true;
 		if (openlist incomplete)
 			iteration = iteration + 1;
 		Step4();
@@ -450,27 +452,16 @@ bool Graph::fraComputeCostMinimalPath(std::vector<Node*> open, int currentIterat
 	Node* current;
 	while (open.size() != 0)
 	{
-		//if (current != nullptr)
-		//{
-		//	if (current->m_previous == nullptr)
-		//	{
-		//		std::cout << "NULL";
-		//	}
-		//}
 
 		current = GetLowestFValue(open);
 		int index = GetLowestFValueIndex(open);
 
-		//std::swap(open.at(index), open.back());
-		//open.pop_back();
+		std::swap(open.at(index), open.back());
+		open.pop_back();
+
 		int indexInNodes = NodeInVectorIndex(current,nodes);
 
 		current->m_marked = true;
-
-		open.erase(std::remove_if(open.begin(), open.end(), [current](auto nodeInVector) { return current == nodeInVector;  }), open.end());
-
-
-		//nodes;
 
 		std::list<Arc>::const_iterator iter = current->m_arcList.begin();
 		std::list<Arc>::const_iterator endIter = current->m_arcList.end();
@@ -492,14 +483,6 @@ bool Graph::fraComputeCostMinimalPath(std::vector<Node*> open, int currentIterat
 							open.push_back(iter->getDestNode());
 						}
 					}
-					//if (current->m_previous == nullptr)
-					//{
-					//	std::cout << current->id << " Error" << std::endl;
-					//}
-					//else
-					//{
-					//	std::cout << current->id << " Ok" << std::endl;
-					//}
 					if (current == goal)
 					{
 							path.clear();
@@ -518,15 +501,9 @@ bool Graph::fraComputeCostMinimalPath(std::vector<Node*> open, int currentIterat
 					std::cout << "ERROR ARC NOT FOUND" << std::endl;
 					//arc not found
 				}
-				//if (iter->getDestNode()->m_previous == nullptr)
-				//{
-				//	//NEVER GETS HERE SO POINTER IS OK UP UNTIL THIS POINT
-				//	std::cout << "NULL";
-				//}
 			}
 
 		}
-		//previous pointer breaks HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	}
 	return false;
 	/*
