@@ -331,7 +331,7 @@ bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 	std::vector<Node*> open;
 	//std::vector<Node*> closed;
 
-	int iteration = 1;
+	
 	//std::vector<Node*> open;
 	Node * start = pStart;
 	Node * prevStart = pStart;
@@ -343,6 +343,7 @@ bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 		nodes.at(index)->generatediteration = 0;
 		nodes.at(index)->m_previous = NULL;
 	}
+	int iteration = 1;
 	fraStarInitializeState(pStart, iteration);
 	start->weight = 0;
 	start->m_marked = true;
@@ -366,7 +367,7 @@ bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 			//	}
 			//}
 		}
-		bool openListComplete = false;
+		bool openListInComplete = false;
 		int pathIndex = path.size() - 2;
 		while (TestClosedList(goal,start))
 		{
@@ -389,10 +390,10 @@ bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 			{
 				//Step2
 				fraStep2(start, prevStart, open);
-				openListComplete = true;
+				openListInComplete = true;
 			}
 		}
-		if (openListComplete == false)
+		if (openListInComplete == true)
 		{
 			iteration++;
 		}
@@ -400,6 +401,7 @@ bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 		fraStep4(open, start, iteration);
 
 	}
+	return true;
 		/*
 		if (NOT ComputeCostMinimalPath())
 			return false;
