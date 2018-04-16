@@ -70,6 +70,12 @@ public:
 	bool NodeInVector(Node* node ,std::vector<Node*> nodeVector);
 	int NodeInVectorIndex(Node* node, std::vector<Node*> nodeVector);
 
+	bool gfraStar(Node* pStart, Node* pDest, std::vector<Node *>& path);
+	void gfraStep2(Node * start, Node * prevStart, std::vector<Node*> open, std::vector<Node*>& deleted);
+	void gfraStep4(std::vector<Node*>& open, Node * start, int currentIteration, std::vector<Node*>& deleted);
+
+	void araStar(Node* pStart, Node* pDest, std::vector<Node *>& path, std::vector<int> * openedNodes);
+
 	bool NodeExists(std::string id);
 	bool NodeExists(int index);
 

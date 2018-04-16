@@ -1,4 +1,4 @@
-#include "Graph.h"
+﻿#include "Graph.h"
 #include <iostream>
 
 
@@ -669,6 +669,138 @@ int Graph::NodeInVectorIndex(Node * node, std::vector<Node*> nodeVector)
 		}
 	}
 	return -1;
+}
+
+bool Graph::gfraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
+{
+	setHeuristic(pStart, pDest);
+	std::vector<Node*> open;
+	std::vector<Node*> deleted;
+
+
+	//std::vector<Node*> open;
+	Node * start = pStart;
+	Node * prevStart = pStart;
+	Node * goal = pDest;
+
+	clearMarks();
+	for (int index = 0; index < nodes.size(); index++)
+	{
+		nodes.at(index)->generatediteration = 0;
+		nodes.at(index)->m_previous = NULL;
+	}
+	int iteration = 1;
+	fraStarInitializeState(pStart, iteration);
+	start->weight = 0;
+	start->m_marked = true;
+
+	open.push_back(start);
+	while (start != goal)
+	{
+		if (fraComputeCostMinimalPath(open, iteration, start, goal, path) == false)
+		{
+			//No path found
+			return false;
+		}
+		else
+		{
+			//for (int i = path.size() - 1; i > -1; i--)
+			//{
+			//	std::cout << "Location : " << path.at(i)->id << " Cost : " << path.at(i)->weight << " h(n) : " << path.at(i)->m_estDistToDest << std::endl;
+			//	if (path.at(i) == nodes.at(NodeInVectorIndex(start,nodes)))
+			//	{
+			//		std::cout << std::endl;
+			//	}
+			//}
+		}
+		bool openListInComplete = false;
+		int pathIndex = path.size() - 2;
+		while (TestClosedList(goal, start))
+		{
+			//follow path from start to goal
+			if (start == goal)
+			{
+				//reached destination
+				return true;
+			}
+			prevStart = start;
+
+			//set new start
+			pathIndex--;
+			start = path.at(pathIndex);
+
+			//set new goal
+			goal;
+
+			if (start != prevStart)
+			{
+				//Step2
+				gfraStep2(start, prevStart, open, deleted);
+				openListInComplete = true;
+			}
+		}
+		if (openListInComplete == true)
+		{
+			iteration++;
+		}
+		//Step 4
+		gfraStep4(open, start, iteration, deleted);
+
+	}
+	return true;
+}
+
+void Graph::gfraStep2(Node * start, Node * prevStart, std::vector<Node*> open, std::vector<Node*>& deleted)
+{
+	start->m_previous = nullptr;
+	std::list<Arc>::const_iterator iter = prevStart->m_arcList.begin();
+	std::list<Arc>::const_iterator endIter = prevStart->m_arcList.end();
+	for (; iter != endIter; iter++)
+	{
+		if (iter->getDestNode()->m_previous != start)
+		{
+			iter->getDestNode()->m_previous = nullptr;
+			deleted.push_back(iter->getDestNode());
+			if (NodeInVector(iter->getDestNode(), open) == true)
+			{
+				std::swap(open.at(NodeInVectorIndex(iter->getDestNode(), open)), open.back());
+				open.pop_back();
+			}
+		}
+	}
+}
+
+void Graph::gfraStep4(std::vector<Node*>& open, Node * start, int currentIteration, std::vector<Node*> & deleted)
+{
+	for (int i = 0; i < open.size(); i++)
+	{
+		open.at(i)->generatediteration = currentIteration;
+	}
+	for (int i = 0; i < deleted.size(); i++)
+	{
+		fraStarInitializeState(deleted.at(i), currentIteration);
+		std::list<Arc>::const_iterator iter = deleted.at(i)->m_arcList.begin();
+		std::list<Arc>::const_iterator endIter = deleted.at(i)->m_arcList.end();
+		for (; iter != endIter; iter++)
+		{
+			if (iter->getDestNode()->m_marked == true)
+			{
+				int dist = iter->getDestNode()->weight + deleted.at(i)->GetArc(iter->getDestNode())->getWeight();
+				if (TestClosedList(iter->getDestNode(), start) == true && deleted.at(i)->weight > dist)
+				{
+					deleted.at(i)->weight = dist;
+					deleted.at(i)->m_previous = iter->getDestNode();
+				}
+			}
+		}
+		open.push_back(deleted.at(i));
+	}
+	deleted.clear();
+}
+
+void Graph::araStar(Node * pStart, Node * pDest, std::vector<Node*>& path, std::vector<int>* openedNodes)
+{
+
 }
 
 /*
