@@ -1,7 +1,13 @@
-#pragma once
+#ifndef __ALGORITHIMPATH_h__  
+#define __ALGORITHIMPATH_h__
+
 #include "Node.h"
 #include <vector>
 #include "Graph.h"
+#include "MapDisplay.h"
+
+
+class Graph;
 
 class AlgorithimPath
 {
@@ -17,7 +23,9 @@ public:
 	std::vector<int>* opendedNodes;
 	std::vector<Node *> path;
 	bool displayStarted;
+	int eValue;
 private:
 
 };
 
+#endif

@@ -647,6 +647,40 @@ int Graph::GetLowestFValueIndex(std::vector<Node*> nodes)
 	return lowestIndex;
 }
 
+Node * Graph::GetLowestFValue(std::vector<Node*> nodes, float e)
+{
+	Node * lowestF = nodes.at(0);
+	for (int i = 0; i < nodes.size(); i++)
+	{
+		//f(n) = h(n) + g(n)
+		int p1 = e*lowestF->m_estDistToDest + lowestF->weight;
+		int p2 = e*nodes.at(i)->m_estDistToDest + nodes.at(i)->weight;
+		if (p1 > p2)
+		{
+			lowestF = nodes.at(i);
+		}
+	}
+	return lowestF;
+}
+
+int Graph::GetLowestFValueIndex(std::vector<Node*> nodes, float e)
+{
+	Node * lowestF = nodes.at(0);
+	int lowestIndex = 0;
+	for (int i = 0; i < nodes.size(); i++)
+	{
+		//f(n) = h(n) + g(n)
+		int p1 = e*lowestF->m_estDistToDest + lowestF->weight;
+		int p2 = e*nodes.at(i)->m_estDistToDest + nodes.at(i)->weight;
+		if (p1 > p2)
+		{
+			lowestF = nodes.at(i);
+			lowestIndex = i;
+		}
+	}
+	return lowestIndex;
+}
+
 bool Graph::NodeInVector(Node* node ,std::vector<Node*> nodeVector)
 {
 	for (int n = 0; n < nodeVector.size(); n++)
@@ -798,9 +832,107 @@ void Graph::gfraStep4(std::vector<Node*>& open, Node * start, int currentIterati
 	deleted.clear();
 }
 
-void Graph::araStar(Node * pStart, Node * pDest, std::vector<Node*>& path, std::vector<int>* openedNodes)
+void Graph::araStar(Node * pStart, Node * pDest,int startPoint, int endPoint, std::vector<AlgorithimPath>& paths)
 {
+	ResetGraph();
+	setHeuristic(pStart,pDest);
+	std::vector<Node*> open;
+	std::vector<Node*> incons;
+	float e = 3.0f;
+	pStart->weight = 0;
+	open.push_back(pStart);
+	paths.push_back(AlgorithimPath(startPoint, endPoint));
+	paths.at(paths.size() - 1).eValue = e;
+	araImprovePath(pStart, pDest, paths.at(paths.size()-1).path, open, incons, e);
 
+	while (e > 1)
+	{
+		e--;
+		for (int i = 0; i < incons.size(); i++)
+		{
+			open.push_back(incons.at(i));
+		}
+		for (int n = 0; n < nodes.size(); n++)
+		{
+			nodes.at(n)->m_marked = false;
+		}
+		paths.push_back(AlgorithimPath(startPoint, endPoint));
+		paths.at(paths.size() - 1).eValue = e;
+		araImprovePath(pStart, pDest, paths.at(paths.size() - 1).path, open, incons, e);
+	}
+}
+
+float Graph::fValue(Node * current, float e)
+{
+	return (current->weight + e*(current->m_estDistToDest));
+}
+
+void Graph::araImprovePath(Node * pStart, Node * pDest, std::vector<Node*>& path, std::vector<Node*>& open, std::vector<Node*>& incons, float e)
+{
+	if (open.size() != 0)
+	{
+		Node* current;
+		current = GetLowestFValue(open, e);
+		int index = GetLowestFValueIndex(open, e);
+
+		while (fValue(pDest, e) > fValue(current, e))
+		{
+			current = GetLowestFValue(open, e);
+			int index = GetLowestFValueIndex(open, e);
+			std::swap(open.at(index), open.back());
+			open.pop_back();
+			int indexInNodes = NodeInVectorIndex(current, nodes);
+			current->m_marked = true;
+
+			std::list<Arc>::const_iterator iter = current->m_arcList.begin();
+			std::list<Arc>::const_iterator endIter = current->m_arcList.end();
+
+			for (; iter != endIter; iter++)
+			{
+				int dist = current->weight + current->GetArc(iter->getDestNode())->getWeight();
+				if (iter->getDestNode()->weight > dist)
+				{
+					iter->getDestNode()->weight = dist;
+					iter->getDestNode()->previousIndex = indexInNodes;
+					if (iter->getDestNode()->m_marked == false)
+					{
+						open.push_back(iter->getDestNode());
+					}
+					else
+					{
+						incons.push_back(iter->getDestNode());
+					}
+				}
+				if (current == pDest)
+				{
+					path.clear();
+					Node* temp = current;
+					path.push_back(current);
+					while (temp != pStart)
+					{
+						temp = nodes.at(temp->previousIndex);
+						path.push_back(temp);
+					}
+				}
+
+			}
+		}
+	}
+
+	/*
+	02 while(fvalue(goal) > node with smallest fvalue in open list)
+		03 remove s with the smallest fvalue(s) from OPEN;
+		04 Add s to closed list
+		05 for each successor s0 of s
+			06 if s0 was not visited before then
+				07 g(s0) =∞;
+			08 if g(s0) > g(s)+ c(s,s0)
+				09 g(s0) = g(s)+ c(s,s0);
+				10 if s0 6∈ CLOSED
+					11 insert s0 into OPEN with fvalue(s0);
+				12 else
+					13 insert s0 into INCONS;
+	*/
 }
 
 /*

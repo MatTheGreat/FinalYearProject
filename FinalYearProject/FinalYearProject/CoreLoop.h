@@ -28,6 +28,7 @@ public:
 	void DisplayPath();
 	void GenerateMap();
 	void RunFRAStar(Graph graph);
+	void RunARAStar(Graph graph);
 
 	bool isRunning;
 

@@ -1,4 +1,4 @@
-#ifndef __Arc_h__  // idempotence - keep header from being included multiple times
+#ifndef __Arc_h__ 
 #define __Arc_h__
 #include "Node.h"
 

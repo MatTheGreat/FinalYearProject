@@ -173,10 +173,26 @@ void CoreLoop::RunFRAStar(Graph graph)
 
 	m_Paths.push_back(AlgorithimPath(start, end));
 
-	graph.fraStar(graph.nodes.at(start), graph.nodes.at(end), m_Paths.at(m_Paths.size() - 1).path);
+	graph.gfraStar(graph.nodes.at(start), graph.nodes.at(end), m_Paths.at(m_Paths.size() - 1).path);
 
 	OutputPathToConsole(m_Paths.at(m_Paths.size() - 1).path);
 }
+
+void CoreLoop::RunARAStar(Graph graph)
+{
+	int start = STARTPOINT;
+	int end = ENDPOINT;
+
+	//m_Paths.push_back(AlgorithimPath(start, end));
+	int index = m_Paths.size();
+	graph.araStar(graph.nodes.at(start), graph.nodes.at(end),start,end, m_Paths);
+	for (int i = index; i < m_Paths.size(); i++)
+	{
+		OutputPathToConsole(m_Paths.at(i).path);
+	}
+	
+}
+
 
 CoreLoop::CoreLoop()
 {
@@ -198,8 +214,8 @@ CoreLoop::CoreLoop()
 	
 	GenerateMap();
 
-	RunFRAStar(graph);
-	//RunAStar(graph);
+	//RunFRAStar(graph);
+	RunARAStar(graph);
 
 }
 

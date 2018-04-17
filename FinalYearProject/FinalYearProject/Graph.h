@@ -4,12 +4,14 @@
 
 #include "Node.h"
 #include "Arc.h"
+#include "AlgorithimPath.h"
 
 #include "MapDisplay.h"
 
+
 class Node;
 class Arc;
-
+class AlgorithimPath;
 
 class NodeSearchEstimateComparer
 {
@@ -67,6 +69,8 @@ public:
 	void ResetGraph();
 	Node* GetLowestFValue(std::vector<Node*> nodes);
 	int GetLowestFValueIndex(std::vector<Node*> nodes);
+	Node* GetLowestFValue(std::vector<Node*> nodes, float e);
+	int GetLowestFValueIndex(std::vector<Node*> nodes, float e);
 	bool NodeInVector(Node* node ,std::vector<Node*> nodeVector);
 	int NodeInVectorIndex(Node* node, std::vector<Node*> nodeVector);
 
@@ -74,7 +78,10 @@ public:
 	void gfraStep2(Node * start, Node * prevStart, std::vector<Node*> open, std::vector<Node*>& deleted);
 	void gfraStep4(std::vector<Node*>& open, Node * start, int currentIteration, std::vector<Node*>& deleted);
 
-	void araStar(Node* pStart, Node* pDest, std::vector<Node *>& path, std::vector<int> * openedNodes);
+	void araStar(Node* pStart, Node* pDest, int startPoint, int endPoint, std::vector<AlgorithimPath>& paths);
+	float fValue(Node* current, float e);
+	void araImprovePath(Node* pStart, Node* pDest, std::vector<Node *>& path, std::vector<Node*>& open, std::vector<Node*>& incons, float e);
+
 
 	bool NodeExists(std::string id);
 	bool NodeExists(int index);
