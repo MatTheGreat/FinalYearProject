@@ -19,4 +19,5 @@ private:
 	sf::Texture orangeTile;
 	sf::Texture greenTile;
 	sf::Texture yellowTile;
+	sf::Texture greyTile;
 };

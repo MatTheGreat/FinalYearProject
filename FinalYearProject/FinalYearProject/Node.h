@@ -28,6 +28,7 @@ public:
 	bool m_removed;
 	int generatediteration;
 	int previousIndex;
+	int m_displayIndex;
 
 	void SetID(std::string newID)
 	{

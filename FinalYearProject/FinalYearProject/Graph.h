@@ -51,7 +51,7 @@ public:
 	Graph();
 	~Graph();
 
-	bool addNode(int data, std::string id);
+	bool addNode(int data, std::string id, int displayIndex);
 	void removeNode(int index);
 	bool addArc(int from, int to, int weight);
 	void removeArc(int from, int to);

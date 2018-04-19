@@ -29,6 +29,8 @@ public:
 	void GenerateMap();
 	void RunFRAStar(Graph graph);
 	void RunARAStar(Graph graph);
+	bool IsObstacle(int column, int row);
+	bool IsObstacle(int index);
 
 	bool isRunning;
 
@@ -46,5 +48,8 @@ private:
 	int pathTimer;
 	//std::vector<Node *> thepath;
 	std::vector<AlgorithimPath> m_Paths;
+	std::vector<std::pair<int, int>> obstcles;
+	std::vector<int> obstcleIndex;
+
 };
 

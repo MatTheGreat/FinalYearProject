@@ -15,7 +15,7 @@ Graph::~Graph()
 	//}
 }
 
-bool Graph::addNode(int data, std::string id)
+bool Graph::addNode(int data, std::string id,int displayIndex)
 {
 	if (NodeExists(id) == false)
 	{
@@ -23,6 +23,7 @@ bool Graph::addNode(int data, std::string id)
 		node->SetID(id);
 		node->SetWeight(data);
 		node->SetMarked(false);
+		node->m_displayIndex = displayIndex;
 		nodes.push_back(node);
 
 		return true;
@@ -44,7 +45,6 @@ void Graph::removeNode(int index)
 			removeArc(i, index);
 		}
 	}
-
 }
 
 bool Graph::addArc(int from, int to, int weight)

@@ -1,7 +1,7 @@
 #include "CoreLoop.h"
 
 const int STARTPOINT = 17;
-const int ENDPOINT = 155;
+const int ENDPOINT = 149;
 
 
 
@@ -73,10 +73,17 @@ void CoreLoop::DisplayPath()
 		{
 			for (int i = 0; i < display.getTiles()->size(); i++)
 			{
-				display.ChangeTile(i, "White");
+				if (IsObstacle(i) == true)
+				{
+					display.ChangeTile(i, "Grey");
+				}
+				else
+				{
+					display.ChangeTile(i, "White");
+				}
 			}
-			display.ChangeTile(m_Paths.at(pathIndex).startPointIndex, "Orange");
-			display.ChangeTile(m_Paths.at(pathIndex).endPointIndex, "Red");
+			display.ChangeTile(graph.nodes.at(m_Paths.at(pathIndex).startPointIndex)->m_displayIndex, "Orange");
+			display.ChangeTile(graph.nodes.at(m_Paths.at(pathIndex).endPointIndex)->m_displayIndex, "Red");
 
 			m_Paths.at(pathIndex).displayStarted = true;
 		}
@@ -90,8 +97,8 @@ void CoreLoop::DisplayPath()
 			}
 			if (pathIndex == m_Paths.size())
 			{
-				display.ChangeTile(m_Paths.at(pathIndex-1).startPointIndex, "White");
-				display.ChangeTile(m_Paths.at(pathIndex-1).endPointIndex, "Orange");
+				display.ChangeTile(graph.nodes.at(m_Paths.at(pathIndex-1).startPointIndex)->m_displayIndex, "White");
+				display.ChangeTile(graph.nodes.at(m_Paths.at(pathIndex-1).endPointIndex)->m_displayIndex, "Orange");
 			}
 			displayTimer = 0;
 		}
@@ -108,60 +115,104 @@ void CoreLoop::DisplayPath()
 
 void CoreLoop::GenerateMap()
 {
+
+	obstcles.push_back(std::pair<int, int>(0, 0));
+	obstcles.push_back(std::pair<int, int>(1, 5));
+	obstcles.push_back(std::pair<int, int>(1, 6));
+	obstcles.push_back(std::pair<int, int>(1, 7));
+	obstcles.push_back(std::pair<int, int>(2, 5));
+	obstcles.push_back(std::pair<int, int>(2, 6));
+	obstcles.push_back(std::pair<int, int>(2, 7));
+	obstcles.push_back(std::pair<int, int>(3, 5));
+	obstcles.push_back(std::pair<int, int>(3, 6));
+	obstcles.push_back(std::pair<int, int>(3, 7));
+	obstcles.push_back(std::pair<int, int>(4, 5));
+	obstcles.push_back(std::pair<int, int>(4, 6));
+	obstcles.push_back(std::pair<int, int>(4, 7));
 	std::string temp;
 	std::ifstream myfile;
-	for (int c = 0; c < 16; c++)
+	int index = 0;
+	for (int r = 0; r < 16; r++)
 	{
-		for (int r = 0; r < 16; r++)
+		for (int c = 0; c < 16; c++)
 		{
 			temp = "R :" + std::to_string(r) + " C: " + std::to_string(c);
-			graph.addNode(std::numeric_limits<int>::max() - 10000, temp);
+			if (IsObstacle(c, r) == false)
+			{
+				graph.addNode(std::numeric_limits<int>::max() - 10000, temp,index);
+			}
+			else
+			{
+				obstcleIndex.push_back(index);
+				display.ChangeTile(index, "Grey");
+			}
+			index++;
 		}
 	}
 	int from, to, weight;
 
-	for (int c = 0; c < 16; c++)
+	for (int r = 0; r < 16; r++)
 	{
-		for (int r = 0; r < 16; r++)
+		for (int c = 0; c < 16; c++)
 		{
 			std::string IDstring;
 			IDstring = "R :" + std::to_string(r) + " C: " + std::to_string(c);
-			if (r != 0)
+			if (IsObstacle(c, r) == true)
 			{
-				std::string destString;
-				destString = "R :" + std::to_string((r - 1)) + " C: " + std::to_string(c);
-				if (graph.getArc(graph.GetIndex(IDstring), graph.GetIndex(destString)) == 0)
+
+			}
+			else
+			{
+				if (r != 0)
 				{
-					graph.addArc(graph.GetIndex(IDstring), graph.GetIndex(destString), 100);
+					std::string destString;
+					destString = "R :" + std::to_string((r - 1)) + " C: " + std::to_string(c);
+					if (IsObstacle(c, r-1) == false)
+					{
+						if (graph.getArc(graph.GetIndex(IDstring), graph.GetIndex(destString)) == 0)
+						{
+							graph.addArc(graph.GetIndex(IDstring), graph.GetIndex(destString), 100);
+						}
+					}
+				}
+				if (c != 0)
+				{
+					std::string destString;
+					destString = "R :" + std::to_string(r) + " C: " + std::to_string((c - 1));
+					if (IsObstacle(c - 1, r) == false)
+					{
+						if (graph.getArc(graph.GetIndex(IDstring), graph.GetIndex(destString)) == 0)
+						{
+							graph.addArc(graph.GetIndex(IDstring), graph.GetIndex(destString), 100);
+						}
+					}
+				}
+				if (r < 15)
+				{
+					std::string destString;
+					destString = "R :" + std::to_string((r + 1)) + " C: " + std::to_string(c);
+					if (IsObstacle(c, r +1) == false)
+					{
+						if (graph.getArc(graph.GetIndex(IDstring), graph.GetIndex(destString)) == 0)
+						{
+							graph.addArc(graph.GetIndex(IDstring), graph.GetIndex(destString), 100);
+						}
+					}
+				}
+				if (c < 15)
+				{
+					std::string destString;
+					destString = "R :" + std::to_string(r) + " C: " + std::to_string((c + 1));
+					if (IsObstacle(c + 1, r) == false)
+					{
+						if (graph.getArc(graph.GetIndex(IDstring), graph.GetIndex(destString)) == 0)
+						{
+							graph.addArc(graph.GetIndex(IDstring), graph.GetIndex(destString), 100);
+						}
+					}
 				}
 			}
-			if (c != 0)
-			{
-				std::string destString;
-				destString = "R :" + std::to_string(r) + " C: " + std::to_string((c - 1));
-				if (graph.getArc(graph.GetIndex(IDstring), graph.GetIndex(destString)) == 0)
-				{
-					graph.addArc(graph.GetIndex(IDstring), graph.GetIndex(destString), 100);
-				}
-			}
-			if (r < 15)
-			{
-				std::string destString;
-				destString = "R :" + std::to_string((r + 1)) + " C: " + std::to_string(c);
-				if (graph.getArc(graph.GetIndex(IDstring), graph.GetIndex(destString)) == 0)
-				{
-					graph.addArc(graph.GetIndex(IDstring), graph.GetIndex(destString), 100);
-				}
-			}
-			if (c < 15)
-			{
-				std::string destString;
-				destString = "R :" + std::to_string(r) + " C: " + std::to_string((c + 1));
-				if (graph.getArc(graph.GetIndex(IDstring), graph.GetIndex(destString)) == 0)
-				{
-					graph.addArc(graph.GetIndex(IDstring), graph.GetIndex(destString), 100);
-				}
-			}
+
 		}
 	}
 }
@@ -193,6 +244,30 @@ void CoreLoop::RunARAStar(Graph graph)
 	
 }
 
+bool CoreLoop::IsObstacle(int column, int row)
+{
+	for (int i = 0; i < obstcles.size(); i++)
+	{
+		if (obstcles.at(i).first == column && obstcles.at(i).second == row)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool CoreLoop::IsObstacle(int index)
+{
+	for (int i = 0; i < obstcleIndex.size(); i++)
+	{
+		if (obstcleIndex.at(i) == index)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 
 CoreLoop::CoreLoop()
 {
@@ -214,8 +289,9 @@ CoreLoop::CoreLoop()
 	
 	GenerateMap();
 
+	RunAStar(graph);
 	//RunFRAStar(graph);
-	RunARAStar(graph);
+	//RunARAStar(graph);
 
 }
 

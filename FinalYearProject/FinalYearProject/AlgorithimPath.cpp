@@ -27,11 +27,12 @@ AlgorithimPath::~AlgorithimPath()
 
 bool AlgorithimPath::DisplayPath(int & pathIndex , Graph & graph , MapDisplay & display)
 {
+
 	if (openedNodesIndex < opendedNodes->size())
 	{
 		if (startPointIndex != opendedNodes->at(openedNodesIndex))
 		{
-			display.ChangeTile(opendedNodes->at(openedNodesIndex), "Yellow");
+			display.ChangeTile(graph.nodes.at(opendedNodes->at(openedNodesIndex))->m_displayIndex, "Yellow");
 		}
 		openedNodesIndex++;
 		return false;
@@ -42,12 +43,12 @@ bool AlgorithimPath::DisplayPath(int & pathIndex , Graph & graph , MapDisplay & 
 		{
 			if (startPointIndex != graph.GetIndex(path.at(i)->id) && endPointIndex != graph.GetIndex(path.at(i)->id))
 			{
-				display.ChangeTile(graph.GetIndex(path.at(i)->id), "Green");
+				display.ChangeTile(graph.nodes.at(graph.GetIndex(path.at(i)->id))->m_displayIndex, "Green");
 			}
 		}
 		
-		display.ChangeTile(startPointIndex, "Orange");
-		display.ChangeTile(endPointIndex, "Red");
+		display.ChangeTile(graph.nodes.at(startPointIndex)->m_displayIndex, "Orange");
+		display.ChangeTile(graph.nodes.at(endPointIndex)->m_displayIndex, "Red");
 		return true;
 	}
 }

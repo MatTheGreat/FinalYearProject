@@ -7,10 +7,11 @@ MapDisplay::MapDisplay()
 	orangeTile.loadFromFile("TileOrange.png");
 	redTile.loadFromFile("TileRed.png");
 	yellowTile.loadFromFile("TileYellow.png");
+	greyTile.loadFromFile("TileGrey.png");
 
-	for (int c = 0; c < 16; c++)
+	for (int r = 0; r< 16; r++)
 	{
-		for (int r = 0; r < 16; r++)
+		for (int c = 0; c < 16; c++)
 		{
 			sf::Sprite * sp = new sf::Sprite();
 			sp->setTexture(whiteTile);
@@ -50,6 +51,10 @@ void MapDisplay::ChangeTile(int index ,std::string tileType)
 	else if (tileType == "Yellow")
 	{
 		tiles.at(index)->setTexture(yellowTile);
+	}
+	else if (tileType == "Grey")
+	{
+		tiles.at(index)->setTexture(greyTile);
 	}
 	else if (tileType == "White")
 	{

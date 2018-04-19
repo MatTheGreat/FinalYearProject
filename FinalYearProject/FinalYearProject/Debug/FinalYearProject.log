@@ -1,29 +1,13 @@
-﻿  Graph.cpp
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(39): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(102): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(111): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(133): warning C4018: '<=': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(150): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(164): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(237): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(241): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(341): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(560): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(572): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(610): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(619): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(636): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(653): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(656): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(657): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(670): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(673): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(674): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(686): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(698): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(721): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(809): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(813): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(850): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\fyp\latest\finalyearproject\finalyearproject\finalyearproject\graph.cpp(854): warning C4018: '<': signed/unsigned mismatch
-  FinalYearProject.vcxproj -> C:\Users\Matthew\Desktop\FYP\latest\FinalYearProject\FinalYearProject\Debug\FinalYearProject.exe
+﻿  CoreLoop.cpp
+c:\users\gameuser\desktop\fyp\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(65): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\gameuser\desktop\fyp\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(70): warning C4018: '<': signed/unsigned mismatch
+c:\users\gameuser\desktop\fyp\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(74): warning C4018: '<': signed/unsigned mismatch
+c:\users\gameuser\desktop\fyp\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(152): warning C4101: 'from': unreferenced local variable
+c:\users\gameuser\desktop\fyp\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(152): warning C4101: 'to': unreferenced local variable
+c:\users\gameuser\desktop\fyp\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(152): warning C4101: 'weight': unreferenced local variable
+c:\users\gameuser\desktop\fyp\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(240): warning C4018: '<': signed/unsigned mismatch
+c:\users\gameuser\desktop\fyp\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(249): warning C4018: '<': signed/unsigned mismatch
+c:\users\gameuser\desktop\fyp\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(261): warning C4018: '<': signed/unsigned mismatch
+c:\users\gameuser\desktop\fyp\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(276): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+  FinalYearProject.vcxproj -> C:\Users\gameuser\Desktop\FYP\FinalYearProject\FinalYearProject\Debug\FinalYearProject.exe
+  FinalYearProject.vcxproj -> C:\Users\gameuser\Desktop\FYP\FinalYearProject\FinalYearProject\Debug\FinalYearProject.pdb (Partial PDB)
