@@ -30,6 +30,7 @@ public:
 	int previousIndex;
 	int m_displayIndex;
 	std::pair<int, int> m_position;
+	int vValue;
 
 	void SetID(std::string newID)
 	{

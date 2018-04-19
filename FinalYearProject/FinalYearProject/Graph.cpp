@@ -252,27 +252,6 @@ void Graph::setHeuristic(Node * pStart, Node * pDest)
 
 }
 
-//void Graph::setHeuristic(Node * pStart, Node * pDest)
-//{
-//	//run UCS in opposite direction
-//	std::vector<Node*> ucsPath;
-//	//ucs(pDest, pStart, ucsPath);
-//	ucs(pDest, pStart, ucsPath);
-//
-//	for (int index = 0; index < nodes.size(); index++)
-//	{
-//		if (nodes.at(index) != nullptr)
-//		{
-//			nodes.at(index)->m_estDistToDest = nodes.at(index)->weight*0.9f;
-//			nodes.at(index)->weight = std::numeric_limits<int>::max() - 10000;
-//			std::cout << nodes.at(index)->id << " " << nodes.at(index)->m_estDistToDest << std::endl;
-//
-//			nodes.at(index)->m_marked = false;
-//			nodes.at(index)->m_removed = false;
-//		}
-//	}
-//}
-
 void Graph::aStar(Node * pStart, Node * pDest, std::vector<Node*>& path , std::vector<int> * openedNodes)
 {
 	ResetGraph();
@@ -346,9 +325,6 @@ void Graph::aStar(Node * pStart, Node * pDest, std::vector<Node*>& path , std::v
 		}
 	}
 }
-
-
-
 
 bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 {
@@ -448,7 +424,6 @@ bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 		*/
 }
 
-
 void Graph::fraStarInitializeState(Node * currentNode, int currentIteration)
 {
 	if (currentNode->generatediteration != currentIteration)
@@ -471,7 +446,6 @@ bool Graph::TestClosedList(Node *current, Node * start)
 		return false;
 	}
 }
-
 
 bool Graph::fraComputeCostMinimalPath(std::vector<Node*> open, int currentIteration,Node* start, Node* goal, std::vector<Node *>& path)
 {
@@ -627,8 +601,6 @@ procedure Step4()
  			parent(node) = n;
 	*/
 }
-
-
 
 void Graph::ResetGraph()
 {
@@ -960,6 +932,97 @@ void Graph::araImprovePath(Node * pStart, Node * pDest, std::vector<Node*>& path
 				12 else
 					13 insert s0 into INCONS;
 	*/
+}
+
+
+
+//The v-value v(s) is the gvalue at the time of the last expansion of cell s. Initially, it is infinity.
+
+bool Graph::iaraStarImprovePath()
+{
+	return false;
+}
+
+bool Graph::iaraStarComputePath()
+{
+	if (iaraStarImprovePath() == false)
+	{
+		return false;
+	}
+	//if (e == 1 || timeLimitReached == true)
+	//{
+		//return true;
+	//}
+	//open = open + inconcs
+	//closed = null
+	//inconcs = null
+	//e = max(1, e-1)
+	return false;
+}
+
+void Graph::iaraStarStep1()
+{
+
+}
+
+void Graph::iaraStarStep2()
+{
+
+}
+
+void Graph::iaraStarStep3()
+{
+
+}
+
+void Graph::iaraStarStep4()
+{
+
+}
+
+bool Graph::iaraStar(Node * pStart, Node * pDest)
+{
+	ResetGraph();
+	setHeuristic(pStart,pDest);
+	float e = 3.0f;
+	std::vector<Node*> open;
+	std::vector<Node*> incons;
+	std::vector<Node*> path;
+	Node * start = pStart;
+	Node * prevStart = pStart;
+	Node * goal = pDest;
+	start->weight = 0;
+	open.push_back(start);
+
+	while (start != goal)
+	{
+		if (iaraStarComputePath() == false)
+		{
+			return false;
+		}
+		prevStart = start;
+
+		if (start == goal)
+		{
+			//reached destination
+			return true;
+		}
+		else
+		{
+			int pathIndex = path.size() - 2;
+			//set new start
+			pathIndex--;
+			start = path.at(pathIndex);
+		}
+		//set new goal
+		goal;
+
+		iaraStarStep1();
+		iaraStarStep2();
+		iaraStarStep3();
+		iaraStarStep4();
+	}
+	return true;
 }
 
 /*

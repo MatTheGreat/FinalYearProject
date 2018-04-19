@@ -83,6 +83,14 @@ public:
 	float fValue(Node* current, float e);
 	void araImprovePath(Node* pStart, Node* pDest, std::vector<Node *>& path, std::vector<Node*>& open, std::vector<Node*>& incons, float e, std::vector<int> * openedNodes);
 
+	bool iaraStarImprovePath();
+	bool iaraStarComputePath();
+	void iaraStarStep1();
+	void iaraStarStep2();
+	void iaraStarStep3();
+	void iaraStarStep4();
+	bool iaraStar(Node * pStart, Node * pDest);
+
 
 	bool NodeExists(std::string id);
 	bool NodeExists(int index);

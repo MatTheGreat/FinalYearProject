@@ -68,6 +68,7 @@ void Node::ResetNode()
 	weight = std::numeric_limits<int>::max() - 10000;
 	m_estDistToDest = std::numeric_limits<int>::max() - 10000;
 	m_removed = false;
+	vValue = std::numeric_limits<int>::max() - 10000;
 }
 
 Node::Node(const Node &obj)
