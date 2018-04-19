@@ -29,6 +29,7 @@ public:
 	int generatediteration;
 	int previousIndex;
 	int m_displayIndex;
+	std::pair<int, int> m_position;
 
 	void SetID(std::string newID)
 	{

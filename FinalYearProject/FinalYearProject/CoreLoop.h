@@ -28,6 +28,7 @@ public:
 	void DisplayPath();
 	void GenerateMap();
 	void RunFRAStar(Graph graph);
+	void RunGFRAStar(Graph graph);
 	void RunARAStar(Graph graph);
 	bool IsObstacle(int column, int row);
 	bool IsObstacle(int index);
@@ -50,6 +51,9 @@ private:
 	std::vector<AlgorithimPath> m_Paths;
 	std::vector<std::pair<int, int>> obstcles;
 	std::vector<int> obstcleIndex;
+
+	int STARTPOINT;
+	int ENDPOINT;
 
 };
 

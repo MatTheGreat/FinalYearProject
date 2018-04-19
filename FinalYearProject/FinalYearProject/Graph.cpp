@@ -15,7 +15,7 @@ Graph::~Graph()
 	//}
 }
 
-bool Graph::addNode(int data, std::string id,int displayIndex)
+bool Graph::addNode(int data, std::string id,int displayIndex, std::pair<int, int> position)
 {
 	if (NodeExists(id) == false)
 	{
@@ -24,6 +24,7 @@ bool Graph::addNode(int data, std::string id,int displayIndex)
 		node->SetWeight(data);
 		node->SetMarked(false);
 		node->m_displayIndex = displayIndex;
+		node->m_position = position;
 		nodes.push_back(node);
 
 		return true;
@@ -227,26 +228,50 @@ void Graph::ucs(Node * pStart, Node * pDest, std::vector<Node*>& path)
 	}
 }
 
+int Graph::GetManhattanDistance(int xPosOne, int yPosOne, int xPosTwo, int yPosTwo)
+{
+	int length;
+	length = sqrt((xPosTwo - xPosOne)*(xPosTwo - xPosOne));
+	length += sqrt((yPosTwo - yPosOne)*(yPosTwo - yPosOne));
+	return length;
+}
+
 void Graph::setHeuristic(Node * pStart, Node * pDest)
 {
-	//run UCS in opposite direction
-	std::vector<Node*> ucsPath;
-	//ucs(pDest, pStart, ucsPath);
-	ucs(pDest, pStart, ucsPath);
 
-	for (int index = 0; index < nodes.size(); index++)
+	for (int i = 0; i < nodes.size(); i++)
 	{
-		if (nodes.at(index) != nullptr)
-		{
-			nodes.at(index)->m_estDistToDest = nodes.at(index)->weight*0.9f;
-			nodes.at(index)->weight = std::numeric_limits<int>::max() - 10000;
-			std::cout << nodes.at(index)->id << " " << nodes.at(index)->m_estDistToDest << std::endl;
+		nodes.at(i)->weight = GetManhattanDistance(pDest->m_position.first, pDest->m_position.second, nodes.at(i)->m_position.first, nodes.at(i)->m_position.second);
+		nodes.at(i)->m_estDistToDest = nodes.at(i)->weight*0.9f;
+		nodes.at(i)->weight = std::numeric_limits<int>::max() - 10000;
+		std::cout << nodes.at(i)->id << " " << nodes.at(i)->m_estDistToDest << std::endl;
 
-			nodes.at(index)->m_marked = false;
-			nodes.at(index)->m_removed = false;
-		}
+		nodes.at(i)->m_marked = false;
+		nodes.at(i)->m_removed = false;
 	}
+
 }
+
+//void Graph::setHeuristic(Node * pStart, Node * pDest)
+//{
+//	//run UCS in opposite direction
+//	std::vector<Node*> ucsPath;
+//	//ucs(pDest, pStart, ucsPath);
+//	ucs(pDest, pStart, ucsPath);
+//
+//	for (int index = 0; index < nodes.size(); index++)
+//	{
+//		if (nodes.at(index) != nullptr)
+//		{
+//			nodes.at(index)->m_estDistToDest = nodes.at(index)->weight*0.9f;
+//			nodes.at(index)->weight = std::numeric_limits<int>::max() - 10000;
+//			std::cout << nodes.at(index)->id << " " << nodes.at(index)->m_estDistToDest << std::endl;
+//
+//			nodes.at(index)->m_marked = false;
+//			nodes.at(index)->m_removed = false;
+//		}
+//	}
+//}
 
 void Graph::aStar(Node * pStart, Node * pDest, std::vector<Node*>& path , std::vector<int> * openedNodes)
 {
@@ -843,7 +868,7 @@ void Graph::araStar(Node * pStart, Node * pDest,int startPoint, int endPoint, st
 	open.push_back(pStart);
 	paths.push_back(AlgorithimPath(startPoint, endPoint));
 	paths.at(paths.size() - 1).eValue = e;
-	araImprovePath(pStart, pDest, paths.at(paths.size()-1).path, open, incons, e);
+	araImprovePath(pStart, pDest, paths.at(paths.size()-1).path, open, incons, e, paths.at(paths.size() - 1).opendedNodes);
 
 	while (e > 1)
 	{
@@ -858,7 +883,7 @@ void Graph::araStar(Node * pStart, Node * pDest,int startPoint, int endPoint, st
 		}
 		paths.push_back(AlgorithimPath(startPoint, endPoint));
 		paths.at(paths.size() - 1).eValue = e;
-		araImprovePath(pStart, pDest, paths.at(paths.size() - 1).path, open, incons, e);
+		araImprovePath(pStart, pDest, paths.at(paths.size() - 1).path, open, incons, e, paths.at(paths.size() - 1).opendedNodes);
 	}
 }
 
@@ -867,7 +892,7 @@ float Graph::fValue(Node * current, float e)
 	return (current->weight + e*(current->m_estDistToDest));
 }
 
-void Graph::araImprovePath(Node * pStart, Node * pDest, std::vector<Node*>& path, std::vector<Node*>& open, std::vector<Node*>& incons, float e)
+void Graph::araImprovePath(Node * pStart, Node * pDest, std::vector<Node*>& path, std::vector<Node*>& open, std::vector<Node*>& incons, float e, std::vector<int> * openedNodes)
 {
 	if (open.size() != 0)
 	{
@@ -884,11 +909,13 @@ void Graph::araImprovePath(Node * pStart, Node * pDest, std::vector<Node*>& path
 			int indexInNodes = NodeInVectorIndex(current, nodes);
 			current->m_marked = true;
 
+			openedNodes->push_back(GetIndex(current->id));
 			std::list<Arc>::const_iterator iter = current->m_arcList.begin();
 			std::list<Arc>::const_iterator endIter = current->m_arcList.end();
-
+			
 			for (; iter != endIter; iter++)
 			{
+				
 				int dist = current->weight + current->GetArc(iter->getDestNode())->getWeight();
 				if (iter->getDestNode()->weight > dist)
 				{
@@ -903,7 +930,7 @@ void Graph::araImprovePath(Node * pStart, Node * pDest, std::vector<Node*>& path
 						incons.push_back(iter->getDestNode());
 					}
 				}
-				if (current == pDest)
+				if (iter->getDestNode() == pDest)
 				{
 					path.clear();
 					Node* temp = current;

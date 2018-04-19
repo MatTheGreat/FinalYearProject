@@ -1,8 +1,5 @@
 #include "CoreLoop.h"
 
-const int STARTPOINT = 17;
-const int ENDPOINT = 149;
-
 
 
 void CoreLoop::RunAStar(Graph graph)
@@ -115,20 +112,24 @@ void CoreLoop::DisplayPath()
 
 void CoreLoop::GenerateMap()
 {
-
-	obstcles.push_back(std::pair<int, int>(0, 0));
 	obstcles.push_back(std::pair<int, int>(1, 5));
 	obstcles.push_back(std::pair<int, int>(1, 6));
 	obstcles.push_back(std::pair<int, int>(1, 7));
 	obstcles.push_back(std::pair<int, int>(2, 5));
 	obstcles.push_back(std::pair<int, int>(2, 6));
 	obstcles.push_back(std::pair<int, int>(2, 7));
-	obstcles.push_back(std::pair<int, int>(3, 5));
-	obstcles.push_back(std::pair<int, int>(3, 6));
-	obstcles.push_back(std::pair<int, int>(3, 7));
+	obstcles.push_back(std::pair<int, int>(4, 4));
 	obstcles.push_back(std::pair<int, int>(4, 5));
 	obstcles.push_back(std::pair<int, int>(4, 6));
 	obstcles.push_back(std::pair<int, int>(4, 7));
+	obstcles.push_back(std::pair<int, int>(4, 8));
+	obstcles.push_back(std::pair<int, int>(8, 6));
+	obstcles.push_back(std::pair<int, int>(8, 7));
+	obstcles.push_back(std::pair<int, int>(6, 2));
+	obstcles.push_back(std::pair<int, int>(6, 5));
+	obstcles.push_back(std::pair<int, int>(9, 6));
+
+
 	std::string temp;
 	std::ifstream myfile;
 	int index = 0;
@@ -136,10 +137,10 @@ void CoreLoop::GenerateMap()
 	{
 		for (int c = 0; c < 16; c++)
 		{
-			temp = "R :" + std::to_string(r) + " C: " + std::to_string(c);
+			temp = "C :" + std::to_string(r) + " R: " + std::to_string(c);
 			if (IsObstacle(c, r) == false)
 			{
-				graph.addNode(std::numeric_limits<int>::max() - 10000, temp,index);
+				graph.addNode(std::numeric_limits<int>::max() - 10000, temp,index,std::pair<int,int>(c*100,r*100));
 			}
 			else
 			{
@@ -156,7 +157,7 @@ void CoreLoop::GenerateMap()
 		for (int c = 0; c < 16; c++)
 		{
 			std::string IDstring;
-			IDstring = "R :" + std::to_string(r) + " C: " + std::to_string(c);
+			IDstring = "C :" + std::to_string(r) + " R: " + std::to_string(c);
 			if (IsObstacle(c, r) == true)
 			{
 
@@ -166,7 +167,7 @@ void CoreLoop::GenerateMap()
 				if (r != 0)
 				{
 					std::string destString;
-					destString = "R :" + std::to_string((r - 1)) + " C: " + std::to_string(c);
+					destString = "C :" + std::to_string((r - 1)) + " R: " + std::to_string(c);
 					if (IsObstacle(c, r-1) == false)
 					{
 						if (graph.getArc(graph.GetIndex(IDstring), graph.GetIndex(destString)) == 0)
@@ -178,7 +179,7 @@ void CoreLoop::GenerateMap()
 				if (c != 0)
 				{
 					std::string destString;
-					destString = "R :" + std::to_string(r) + " C: " + std::to_string((c - 1));
+					destString = "C :" + std::to_string(r) + " R: " + std::to_string((c - 1));
 					if (IsObstacle(c - 1, r) == false)
 					{
 						if (graph.getArc(graph.GetIndex(IDstring), graph.GetIndex(destString)) == 0)
@@ -190,7 +191,7 @@ void CoreLoop::GenerateMap()
 				if (r < 15)
 				{
 					std::string destString;
-					destString = "R :" + std::to_string((r + 1)) + " C: " + std::to_string(c);
+					destString = "C :" + std::to_string((r + 1)) + " R: " + std::to_string(c);
 					if (IsObstacle(c, r +1) == false)
 					{
 						if (graph.getArc(graph.GetIndex(IDstring), graph.GetIndex(destString)) == 0)
@@ -202,7 +203,7 @@ void CoreLoop::GenerateMap()
 				if (c < 15)
 				{
 					std::string destString;
-					destString = "R :" + std::to_string(r) + " C: " + std::to_string((c + 1));
+					destString = "C :" + std::to_string(r) + " R: " + std::to_string((c + 1));
 					if (IsObstacle(c + 1, r) == false)
 					{
 						if (graph.getArc(graph.GetIndex(IDstring), graph.GetIndex(destString)) == 0)
@@ -218,6 +219,18 @@ void CoreLoop::GenerateMap()
 }
 
 void CoreLoop::RunFRAStar(Graph graph)
+{
+	int start = STARTPOINT;
+	int end = ENDPOINT;
+
+	m_Paths.push_back(AlgorithimPath(start, end));
+
+	graph.fraStar(graph.nodes.at(start), graph.nodes.at(end), m_Paths.at(m_Paths.size() - 1).path);
+
+	OutputPathToConsole(m_Paths.at(m_Paths.size() - 1).path);
+}
+
+void CoreLoop::RunGFRAStar(Graph graph)
 {
 	int start = STARTPOINT;
 	int end = ENDPOINT;
@@ -241,6 +254,7 @@ void CoreLoop::RunARAStar(Graph graph)
 	{
 		OutputPathToConsole(m_Paths.at(i).path);
 	}
+	displayPath = true;
 	
 }
 
@@ -248,7 +262,7 @@ bool CoreLoop::IsObstacle(int column, int row)
 {
 	for (int i = 0; i < obstcles.size(); i++)
 	{
-		if (obstcles.at(i).first == column && obstcles.at(i).second == row)
+		if (obstcles.at(i).first == row && obstcles.at(i).second == column)
 		{
 			return true;
 		}
@@ -275,7 +289,10 @@ CoreLoop::CoreLoop()
 	window = new sf::RenderWindow(sf::VideoMode(768, 768), "Final Year Project");
 	window->setFramerateLimit(60.0f);
 
+
+
 	graph = Graph();
+
 
 	displayPath = false;
 	displayTimer = 0;
@@ -289,9 +306,13 @@ CoreLoop::CoreLoop()
 	
 	GenerateMap();
 
-	RunAStar(graph);
+	STARTPOINT = graph.GetIndex("C :1 R: 4");
+	ENDPOINT = graph.GetIndex("C :7 R: 7");
+
+	//RunAStar(graph);
 	//RunFRAStar(graph);
-	//RunARAStar(graph);
+	//RunGFRAStar(graph);
+	RunARAStar(graph);
 
 }
 
