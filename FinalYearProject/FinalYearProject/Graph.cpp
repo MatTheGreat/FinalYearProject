@@ -938,9 +938,63 @@ void Graph::araImprovePath(Node * pStart, Node * pDest, std::vector<Node*>& path
 
 //The v-value v(s) is the gvalue at the time of the last expansion of cell s. Initially, it is infinity.
 
-bool Graph::iaraStarImprovePath()
+bool Graph::iaraStarImprovePath(Node * pStart, Node * pDest, std::vector<Node*>& path, std::vector<Node*>& open, std::vector<Node*>& incons, int e)
 {
 	// function ImprovePath()
+	Node* current;
+	current = GetLowestFValue(open, e);
+	int index = GetLowestFValueIndex(open, e);
+
+	while (fValue(pDest, e) > fValue(current, e))
+	{
+		current = GetLowestFValue(open, e);
+		int index = GetLowestFValueIndex(open, e);
+		std::swap(open.at(index), open.back());
+		open.pop_back();
+		int indexInNodes = NodeInVectorIndex(current, nodes);
+		nodes.at(indexInNodes)->vValue = nodes.at(indexInNodes)->weight;
+		current->m_marked = true;
+
+		std::list<Arc>::const_iterator iter = current->m_arcList.begin();
+		std::list<Arc>::const_iterator endIter = current->m_arcList.end();
+
+		for (; iter != endIter; iter++)
+		{
+			if (iter->getDestNode()->weight > (current->vValue + iter->getWeight()))
+			{
+				iter->getDestNode()->weight = current->vValue + iter->getWeight();
+				iter->getDestNode()->m_previous = current;
+				if (iter->getDestNode()->m_marked == false)
+				{
+					if (NodeInVector(iter->getDestNode(), open) == false && NodeInVector(iter->getDestNode(), incons))
+					{
+						open.push_back(iter->getDestNode());
+					}
+				}
+				else
+				{
+					iter->getDestNode()->m_marked = false;
+					incons.push_back(iter->getDestNode());
+				}
+			}
+		}
+	}
+	if (pDest->weight == std::numeric_limits<int>::max() - 10000)
+	{
+		return false;
+	}
+	else
+	{
+		path.clear();
+		Node* temp = pDest;
+		path.push_back(pDest);
+		while (temp != pStart)
+		{
+			temp = nodes.at(temp->previousIndex);
+			path.push_back(temp);
+		}
+		return true;
+	}
 		// while g(sgoal) + e × h(sgoal, sgoal) > mins∈OPEN(g(s) + e × h(s, sgoal))
 			// move s in OPEN with the smallest g(s) + e × h(s, sgoal) from OPEN to CLOSED;
 			// v(s) = g(s);
@@ -957,25 +1011,28 @@ bool Graph::iaraStarImprovePath()
 		// return false;
 	// else
 		// return true;
-
-	return false;
 }
 
-bool Graph::iaraStarComputePath()
+bool Graph::iaraStarComputePath(Node * pStart, Node * pDest, std::vector<Node*>& path, std::vector<Node*>& open, std::vector<Node*>& incons, int e)
 {
-	if (iaraStarImprovePath() == false)
+	while (true)
 	{
-		return false;
+		if (iaraStarImprovePath(pStart, pDest, path, open, incons, e) == false)
+		{
+			return false;
+		}
+		if (e == 1)
+		{
+			return true;
+		}
+		for (int i = 0; i < incons.size(); i++)
+		{
+			open.push_back(incons.at(i));
+		}
+		clearMarks();
+		incons.clear();
+		e = std::max(1, e - 1);
 	}
-	//if (e == 1 || timeLimitReached == true)
-	//{
-		//return true;
-	//}
-	//open = open + inconcs
-	//closed = null
-	//inconcs = null
-	//e = max(1, e-1)
-	return false;
 }
 
 void Graph::iaraStarStep1(Node* start, std::vector<Node*> open, std::vector<Node*> incons)
@@ -1129,7 +1186,7 @@ bool Graph::iaraStar(Node * pStart, Node * pDest)
 
 	while (start != goal)
 	{
-		if (iaraStarComputePath() == false)
+		if (iaraStarComputePath(pStart,pDest,path,open,incons,e) == false)
 		{
 			return false;
 		}
@@ -1153,7 +1210,7 @@ bool Graph::iaraStar(Node * pStart, Node * pDest)
 		iaraStarStep1(start,open,incons);
 		iaraStarStep2(start,prevStart,open,incons,deleted);
 		iaraStarStep3(deleted,open);
-		iaraStarStep4();
+		iaraStarStep4(goal,open,e,5);
 	}
 	return true;
 }
