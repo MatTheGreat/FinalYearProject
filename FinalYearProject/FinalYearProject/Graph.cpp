@@ -1092,9 +1092,20 @@ void Graph::iaraStarStep3(std::vector<Node*> deleted, std::vector<Node*> open)
 
 }
 
-void Graph::iaraStarStep4()
+void Graph::iaraStarStep4(Node* goal, std::vector<Node*> open, int e, int emax)
 {
 	// procedure Step4()
+	Node* lowestfValueNode;
+	lowestfValueNode = GetLowestFValue(open, e);
+	int index = GetLowestFValueIndex(open, e);
+	if (fValue(goal,e) < fValue(open.at(index),e))
+	{
+		e = emax;
+	}
+	else
+	{
+		e = std::max(1, e - 1);
+	}
 		// if g(sgoal) + e × h(sgoal, sgoal) > mins∈OPEN(g(s) + e × h(s, sgoal))
 		// e = emax;
 	// else

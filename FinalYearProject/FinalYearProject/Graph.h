@@ -88,7 +88,7 @@ public:
 	void iaraStarStep1(Node* start, std::vector<Node*> open, std::vector<Node*> incons);
 	void iaraStarStep2(Node* start, Node* prevStart, std::vector<Node*> open, std::vector<Node*> incons, std::vector<Node*> deleted);
 	void iaraStarStep3(std::vector<Node*> deleted, std::vector<Node*> open);
-	void iaraStarStep4();
+	void iaraStarStep4(Node* goal, std::vector<Node*> open, int e, int emax);
 	bool iaraStar(Node * pStart, Node * pDest);
 
 
