@@ -85,9 +85,9 @@ public:
 
 	bool iaraStarImprovePath();
 	bool iaraStarComputePath();
-	void iaraStarStep1();
-	void iaraStarStep2();
-	void iaraStarStep3();
+	void iaraStarStep1(Node* start, std::vector<Node*> open, std::vector<Node*> incons);
+	void iaraStarStep2(Node* start, Node* prevStart, std::vector<Node*> open, std::vector<Node*> incons, std::vector<Node*> deleted);
+	void iaraStarStep3(std::vector<Node*> deleted, std::vector<Node*> open);
 	void iaraStarStep4();
 	bool iaraStar(Node * pStart, Node * pDest);
 

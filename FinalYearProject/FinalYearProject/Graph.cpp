@@ -978,29 +978,107 @@ bool Graph::iaraStarComputePath()
 	return false;
 }
 
-void Graph::iaraStarStep1()
+void Graph::iaraStarStep1(Node* start, std::vector<Node*> open, std::vector<Node*> incons)
 {
+	if (start->weight != start->vValue)
+	{
+		start->weight = start->vValue;
+		if (NodeInVector(start, incons) == true)
+		{
+			int index = NodeInVectorIndex(start, incons);
+			std::swap(incons.at(index), incons.back());
+			incons.pop_back();
+		}
+		if (NodeInVector(start, open) == true)
+		{
+			int index = NodeInVectorIndex(start, open);
+			std::swap(open.at(index), open.back());
+			open.pop_back();
+		}
+	}
 	//if weight(startNode) != v(startNode)
 		//weight(startNode) = v(startNode);
 		// delete startNode from INCONS if startNode in INCONS;
 		// delete startNode from OPEN if startNode in OPEN;
 }
 
-void Graph::iaraStarStep2()
+void Graph::iaraStarStep2(Node* start, Node* prevStart, std::vector<Node*> open, std::vector<Node*> incons, std::vector<Node*> deleted)
 {
+	if (start != prevStart)
+	{
+		start->m_previous = nullptr;
+		std::list<Arc>::const_iterator iterPrev = prevStart->m_arcList.begin();
+		std::list<Arc>::const_iterator endIterPrev = prevStart->m_arcList.end();
+		for (; iterPrev != endIterPrev; iterPrev++)
+		{
+			std::list<Arc>::const_iterator iter = start->m_arcList.begin();
+			std::list<Arc>::const_iterator endIter = start->m_arcList.end();
+			bool nodeInSubTree = false;
+			for (; iter != endIter; iter++)
+			{
+				if (iterPrev->getDestNode() == iter->getDestNode())
+				{
+					nodeInSubTree = true;
+				}
+			}
+			if (nodeInSubTree == false)
+			{
+				iterPrev->getDestNode()->vValue = iterPrev->getDestNode()->weight;
+				iterPrev->getDestNode()->m_previous = nullptr;
+				if (NodeInVector(iterPrev->getDestNode(), incons) == true)
+				{
+					int index = NodeInVectorIndex(iterPrev->getDestNode(), incons);
+					std::swap(incons.at(index), incons.back());
+					incons.pop_back();
+				}
+				if (NodeInVector(iterPrev->getDestNode(), open) == true)
+				{
+					int index = NodeInVectorIndex(iterPrev->getDestNode(), open);
+					std::swap(open.at(index), open.back());
+					open.pop_back();
+				}
+				deleted.push_back(iterPrev->getDestNode());
+			}
+
+		}
+
+	}
 	// procedure Step2()
 		// if start != previous start
-		// parent(start) := NULL;
-	// forall s in the search tree rooted at previous sstart but not in the subtree rooted at sstart
-		// v(s) = g(s) = ∞;
-		// parent(s) = NULL;
-		// delete s from INCONS if s in INCONS;
-		// delete s from OPEN if s in OPEN;
-		// insert s into DELETED;
+			// parent(start) := NULL;
+			// forall s in the search tree rooted at previous sstart but not in the subtree rooted at sstart
+				// v(s) = g(s) = ∞;
+				// parent(s) = NULL;
+				// delete s from INCONS if s in INCONS;
+				// delete s from OPEN if s in OPEN;
+				// insert s into DELETED;
+
 }
 
-void Graph::iaraStarStep3()
+void Graph::iaraStarStep3(std::vector<Node*> deleted, std::vector<Node*> open)
 {
+	for (int i = 0; i < deleted.size(); i++)
+	{
+		std::list<Arc>::const_iterator iter = deleted.at(i)->m_arcList.begin();
+		std::list<Arc>::const_iterator endIter = deleted.at(i)->m_arcList.end();
+		for (; iter != endIter; iter++)
+		{
+			if (deleted.at(i)->weight > iter->getDestNode()->vValue + iter->getDestNode()->GetArc(deleted.at(i))->getWeight())
+			{
+				deleted.at(i)->weight = iter->getDestNode()->vValue + iter->getDestNode()->GetArc(deleted.at(i))->getWeight();
+				deleted.at(i)->m_previous = iter->getDestNode();
+			}
+		}
+		if (deleted.at(i)->weight != std::numeric_limits<int>::max() - 10000)
+		{
+			open.push_back(deleted.at(i));
+		}
+	}
+
+	open.clear();
+	deleted.clear();
+	clearMarks();
+
 	// procedure Step3()
 		// forall s in DELETED
 			// forall s′ in Neighbor(s)
@@ -1010,7 +1088,8 @@ void Graph::iaraStarStep3()
 			// if g(s) 6 = ∞
 				// insert s into OPEN;
 	// OPEN : = OPEN and INCONS;
-	// CLOSED : = INCONS : = DELETED : = NULL;
+	// CLOSED : = INCONS : = DELETED : = NULL;
+
 }
 
 void Graph::iaraStarStep4()
@@ -1060,9 +1139,9 @@ bool Graph::iaraStar(Node * pStart, Node * pDest)
 		//set new goal
 		goal;
 
-		iaraStarStep1();
-		iaraStarStep2();
-		iaraStarStep3();
+		iaraStarStep1(start,open,incons);
+		iaraStarStep2(start,prevStart,open,incons,deleted);
+		iaraStarStep3(deleted,open);
 		iaraStarStep4();
 	}
 	return true;
