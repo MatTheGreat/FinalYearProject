@@ -940,6 +940,24 @@ void Graph::araImprovePath(Node * pStart, Node * pDest, std::vector<Node*>& path
 
 bool Graph::iaraStarImprovePath()
 {
+	// function ImprovePath()
+		// while g(sgoal) + e × h(sgoal, sgoal) > mins∈OPEN(g(s) + e × h(s, sgoal))
+			// move s in OPEN with the smallest g(s) + e × h(s, sgoal) from OPEN to CLOSED;
+			// v(s) = g(s);
+			// forall s′ int Neighbor(s)
+				// if g(s′) > v(s) + c(s, s′)
+					// g(s′) = v(s) + c(s, s′);
+					// parent(s′) := s;
+					// if s′ not in CLOSED
+						// if s′ not in OPEN AND s′ not in INCONS
+							// insert s′into OPEN;
+					// else
+						// move s′from CLOSED to INCONS;
+	// if g(sgoal) = ∞
+		// return false;
+	// else
+		// return true;
+
 	return false;
 }
 
@@ -962,22 +980,46 @@ bool Graph::iaraStarComputePath()
 
 void Graph::iaraStarStep1()
 {
-
+	//if weight(startNode) != v(startNode)
+		//weight(startNode) = v(startNode);
+		// delete startNode from INCONS if startNode in INCONS;
+		// delete startNode from OPEN if startNode in OPEN;
 }
 
 void Graph::iaraStarStep2()
 {
-
+	// procedure Step2()
+		// if start != previous start
+		// parent(start) := NULL;
+	// forall s in the search tree rooted at previous sstart but not in the subtree rooted at sstart
+		// v(s) = g(s) = ∞;
+		// parent(s) = NULL;
+		// delete s from INCONS if s in INCONS;
+		// delete s from OPEN if s in OPEN;
+		// insert s into DELETED;
 }
 
 void Graph::iaraStarStep3()
 {
-
+	// procedure Step3()
+		// forall s in DELETED
+			// forall s′ in Neighbor(s)
+				// if g(s) > v(s′) + c(s′, s)
+					// g(s) := v(s′) + c(s′, s);
+					// parent(s) := s′;
+			// if g(s) 6 = ∞
+				// insert s into OPEN;
+	// OPEN : = OPEN and INCONS;
+	// CLOSED : = INCONS : = DELETED : = NULL;
 }
 
 void Graph::iaraStarStep4()
 {
-
+	// procedure Step4()
+		// if g(sgoal) + e × h(sgoal, sgoal) > mins∈OPEN(g(s) + e × h(s, sgoal))
+		// e = emax;
+	// else
+		// e = max(1, e − δe);
 }
 
 bool Graph::iaraStar(Node * pStart, Node * pDest)
@@ -987,6 +1029,7 @@ bool Graph::iaraStar(Node * pStart, Node * pDest)
 	float e = 3.0f;
 	std::vector<Node*> open;
 	std::vector<Node*> incons;
+	std::vector<Node*> deleted;
 	std::vector<Node*> path;
 	Node * start = pStart;
 	Node * prevStart = pStart;
