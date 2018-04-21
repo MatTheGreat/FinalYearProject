@@ -24,7 +24,7 @@ public:
 	void Loop();
 	void RunAStar(Graph graph);
 	void OutputPathToConsole(std::vector<Node *> path);
-	void OutputToCSVFile(int startPoint, int endPoint, int timeTaken, int nodesOpened);
+	void OutputToCSVFile(std::string algorithim, int startPoint, int endPoint, int timeTaken, int nodesOpened, int eValue);
 	void DisplayPath();
 	void GenerateMap();
 	void RunFRAStar(Graph graph);

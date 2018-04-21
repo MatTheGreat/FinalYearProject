@@ -1,51 +1,13 @@
-﻿  Graph.cpp
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(41): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(103): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(112): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(134): warning C4018: '<=': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(151): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(165): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(234): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(235): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(242): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(245): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(342): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(559): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(571): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(607): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(616): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(633): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(650): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(653): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(654): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(667): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(670): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(671): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(683): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(695): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(718): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(806): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(810): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(842): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(848): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(852): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(857): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(947): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(948): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(950): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(952): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(953): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(1035): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(1124): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(1163): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(1164): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(1165): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(1196): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(1221): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-  Generating Code...
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\graph.cpp(1019): warning C4715: 'Graph::iaraStarImprovePath': not all control paths return a value
-  Skipping... (no relevant changes detected)
-  FinalYearProject.cpp
-  CoreLoop.cpp
-  AlgorithimPath.cpp
-  FinalYearProject.vcxproj -> C:\Users\Matthew\Desktop\New folder (12)\FinalYearProject\FinalYearProject\Debug\FinalYearProject.exe
+﻿  CoreLoop.cpp
+c:\users\gameuser\desktop\final\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(62): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\gameuser\desktop\final\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(67): warning C4018: '<': signed/unsigned mismatch
+c:\users\gameuser\desktop\final\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(71): warning C4018: '<': signed/unsigned mismatch
+c:\users\gameuser\desktop\final\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(153): warning C4101: 'from': unreferenced local variable
+c:\users\gameuser\desktop\final\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(153): warning C4101: 'to': unreferenced local variable
+c:\users\gameuser\desktop\final\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(153): warning C4101: 'weight': unreferenced local variable
+c:\users\gameuser\desktop\final\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(253): warning C4018: '<': signed/unsigned mismatch
+c:\users\gameuser\desktop\final\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(318): warning C4018: '<': signed/unsigned mismatch
+c:\users\gameuser\desktop\final\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(330): warning C4018: '<': signed/unsigned mismatch
+c:\users\gameuser\desktop\final\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(345): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+  FinalYearProject.vcxproj -> C:\Users\gameuser\Desktop\Final\FinalYearProject\FinalYearProject\Debug\FinalYearProject.exe
+  FinalYearProject.vcxproj -> C:\Users\gameuser\Desktop\Final\FinalYearProject\FinalYearProject\Debug\FinalYearProject.pdb (Partial PDB)

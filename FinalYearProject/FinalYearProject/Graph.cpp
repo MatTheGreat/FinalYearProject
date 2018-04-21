@@ -328,6 +328,7 @@ void Graph::aStar(Node * pStart, Node * pDest, std::vector<Node*>& path , std::v
 
 bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 {
+	ResetGraph();
 	setHeuristic(pStart, pDest);
 	std::vector<Node*> open;
 	//std::vector<Node*> closed;
@@ -704,6 +705,7 @@ int Graph::NodeInVectorIndex(Node * node, std::vector<Node*> nodeVector)
 
 bool Graph::gfraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 {
+	ResetGraph();
 	setHeuristic(pStart, pDest);
 	std::vector<Node*> open;
 	std::vector<Node*> deleted;

@@ -17,17 +17,20 @@ void Outputter::firstLog()
 	fileName = "Output.csv";
 	csvFile.open(fileName);
 	//Sets up first row
-	csvFile << "Start Point,End Point,Time Taken(ms),Number of Nodes Visited";
+	csvFile << "Alogrithim, Start Point,End Point,Time Taken(ms),Number of Nodes Visited , E Value";
 	csvFile.close();
 
 	logNewLine();
 }
 
-void Outputter::LogData(int startPoint, int endPoint, float timeTaken, int numVisited)
+void Outputter::LogData(std::string algorithim,int startPoint, int endPoint, float timeTaken, int numVisited , int eValue)
 {
 	//opens the file at the end of the file
 	csvFile.open(fileName, std::ios::app);
-	std::string output = std::to_string(startPoint);
+	std::string output = algorithim;
+	csvFile << output;
+	csvFile << ",";
+	output = std::to_string(startPoint);
 	csvFile << output;
 	csvFile << ",";
 	output = std::to_string(endPoint);
@@ -37,6 +40,16 @@ void Outputter::LogData(int startPoint, int endPoint, float timeTaken, int numVi
 	csvFile << output;
 	csvFile << ",";
 	output = std::to_string(numVisited);
+	csvFile << output;
+	csvFile << ",";
+	if (eValue == 0)
+	{
+		output = "N/A";
+	}
+	else
+	{
+		output = std::to_string(eValue);
+	}
 	csvFile << output;
 	csvFile.close();
 	logNewLine();

@@ -12,7 +12,7 @@ public:
 	bool isFirstLog;
 
 	void firstLog();
-	void LogData(int startPoint, int endPoint, float timeTaken, int numVisited);
+	void LogData(std::string algorithim, int startPoint, int endPoint, float timeTaken, int numVisited, int eValue);
 	void logNewLine();
 
 private:
