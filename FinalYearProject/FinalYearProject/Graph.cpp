@@ -326,7 +326,7 @@ void Graph::aStar(Node * pStart, Node * pDest, std::vector<Node*>& path , std::v
 	}
 }
 
-bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
+bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<AlgorithimPath>& paths)
 {
 	ResetGraph();
 	setHeuristic(pStart, pDest);
@@ -353,7 +353,8 @@ bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 	open.push_back(start);
 	while (start != goal)
 	{
-		if (fraComputeCostMinimalPath(open,iteration,start,goal,path) == false)
+		paths.push_back(AlgorithimPath(NodeInVectorIndex(start, nodes), NodeInVectorIndex(goal, nodes)));
+		if (fraComputeCostMinimalPath(open,iteration,start,goal, paths.at(paths.size() - 1).path, paths.at(paths.size() - 1).opendedNodes) == false)
 		{
 			//No path found
 			return false;
@@ -370,7 +371,7 @@ bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 			//}
 		}
 		bool openListInComplete = false;
-		int pathIndex = path.size() - 2;
+		int pathIndex = paths.at(paths.size() - 1).path.size() - 2;
 		while (TestClosedList(goal,start))
 		{
 			//follow path from start to goal
@@ -383,7 +384,7 @@ bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 
 			//set new start
 			pathIndex--;
-			start = path.at(pathIndex);
+			start = paths.at(paths.size() - 1).path.at(pathIndex);
 
 			//set new goal
 			goal;
@@ -448,7 +449,7 @@ bool Graph::TestClosedList(Node *current, Node * start)
 	}
 }
 
-bool Graph::fraComputeCostMinimalPath(std::vector<Node*> open, int currentIteration,Node* start, Node* goal, std::vector<Node *>& path)
+bool Graph::fraComputeCostMinimalPath(std::vector<Node*> open, int currentIteration,Node* start, Node* goal, std::vector<Node *>& path,  std::vector<int> * openedNodes)
 {
 	
 	Node* current;
@@ -465,6 +466,7 @@ bool Graph::fraComputeCostMinimalPath(std::vector<Node*> open, int currentIterat
 
 		current->m_marked = true;
 
+		openedNodes->push_back(GetIndex(current->id));
 		std::list<Arc>::const_iterator iter = current->m_arcList.begin();
 		std::list<Arc>::const_iterator endIter = current->m_arcList.end();
 
@@ -703,7 +705,7 @@ int Graph::NodeInVectorIndex(Node * node, std::vector<Node*> nodeVector)
 	return -1;
 }
 
-bool Graph::gfraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
+bool Graph::gfraStar(Node * pStart, Node * pDest, std::vector<AlgorithimPath>& paths)
 {
 	ResetGraph();
 	setHeuristic(pStart, pDest);
@@ -730,7 +732,8 @@ bool Graph::gfraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 	open.push_back(start);
 	while (start != goal)
 	{
-		if (fraComputeCostMinimalPath(open, iteration, start, goal, path) == false)
+		paths.push_back(AlgorithimPath(NodeInVectorIndex(start,nodes), NodeInVectorIndex(goal,nodes)));
+		if (fraComputeCostMinimalPath(open, iteration, start, goal, paths.at(paths.size() - 1).path, paths.at(paths.size() - 1).opendedNodes) == false)
 		{
 			//No path found
 			return false;
@@ -747,7 +750,7 @@ bool Graph::gfraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 			//}
 		}
 		bool openListInComplete = false;
-		int pathIndex = path.size() - 2;
+		int pathIndex = paths.at(paths.size() - 1).path.size() - 2;
 		while (TestClosedList(goal, start))
 		{
 			//follow path from start to goal
@@ -760,7 +763,7 @@ bool Graph::gfraStar(Node * pStart, Node * pDest, std::vector<Node*>& path)
 
 			//set new start
 			pathIndex--;
-			start = path.at(pathIndex);
+			start = paths.at(paths.size() - 1).path.at(pathIndex);
 
 			//set new goal
 			goal;
@@ -1024,7 +1027,7 @@ bool Graph::iaraStarComputePath(Node * pStart, Node * pDest, std::vector<Algorit
 {
 	while (true)
 	{
-		paths.push_back(AlgorithimPath(NodeInVector(pStart,nodes), NodeInVector(pStart, nodes)));
+		paths.push_back(AlgorithimPath(NodeInVectorIndex(pStart,nodes), NodeInVectorIndex(pDest, nodes)));
 		paths.at(paths.size() - 1).eValue = e;
 		if (iaraStarImprovePath(pStart, pDest, paths.at(paths.size() - 1).path, open, incons, e, paths.at(paths.size() - 1).opendedNodes) == false)
 		{

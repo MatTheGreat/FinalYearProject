@@ -223,11 +223,16 @@ void CoreLoop::RunFRAStar(Graph graph)
 	int start = STARTPOINT;
 	int end = ENDPOINT;
 
-	m_Paths.push_back(AlgorithimPath(start, end));
+	int index = m_Paths.size();
+	graph.fraStar(graph.nodes.at(start), graph.nodes.at(end), m_Paths);
+	for (int i = index; i < m_Paths.size(); i++)
+	{
+		OutputPathToConsole(m_Paths.at(i).path);
+		OutputToCSVFile("FRA*", m_Paths.at(i).startPointIndex, m_Paths.at(i).endPointIndex, timeTaken, m_Paths.at(i).opendedNodes->size(), 0);
+	}
 
-	graph.fraStar(graph.nodes.at(start), graph.nodes.at(end), m_Paths.at(m_Paths.size() - 1).path);
 
-	OutputPathToConsole(m_Paths.at(m_Paths.size() - 1).path);
+	displayPath = true;
 }
 
 void CoreLoop::RunGFRAStar(Graph graph)
@@ -235,11 +240,18 @@ void CoreLoop::RunGFRAStar(Graph graph)
 	int start = STARTPOINT;
 	int end = ENDPOINT;
 
-	m_Paths.push_back(AlgorithimPath(start, end));
+	//m_Paths.push_back(AlgorithimPath(start, end));
+	int index = m_Paths.size();
+	graph.gfraStar(graph.nodes.at(start), graph.nodes.at(end), m_Paths);
+	for (int i = index; i < m_Paths.size(); i++)
+	{
+		OutputPathToConsole(m_Paths.at(i).path);
+		OutputToCSVFile("G-FRA*", m_Paths.at(i).startPointIndex, m_Paths.at(i).endPointIndex, timeTaken, m_Paths.at(i).opendedNodes->size(), 0);
+	}
+	
 
-	graph.gfraStar(graph.nodes.at(start), graph.nodes.at(end), m_Paths.at(m_Paths.size() - 1).path);
+	displayPath = true;
 
-	OutputPathToConsole(m_Paths.at(m_Paths.size() - 1).path);
 }
 
 void CoreLoop::RunIARAStar(Graph graph)
@@ -256,6 +268,10 @@ void CoreLoop::RunIARAStar(Graph graph)
 		std::cout << "" << std::endl;
 		OutputPathToConsole(m_Paths.at(i).path);
 		OutputToCSVFile("I-ARA*", m_Paths.at(i).startPointIndex, m_Paths.at(i).endPointIndex, timeTaken, m_Paths.at(i).opendedNodes->size(), m_Paths.at(i).eValue);
+		if (m_Paths.at(i).eValue == 1)
+		{
+			output->logNewLine();
+		}
 	}
 	displayPath = true;
 }
@@ -265,15 +281,21 @@ void CoreLoop::RunARAStar(Graph graph)
 	int start = STARTPOINT;
 	int end = ENDPOINT;
 
-	//int index = m_Paths.size();
 	clock.restart();
 
 	graph.araStar(graph.nodes.at(start), graph.nodes.at(end), start, end, m_Paths);
 
 	timeTaken = clock.getElapsedTime().asMilliseconds();
+	
 
-	//Node * newStart = m_Paths.at(m_Paths.size() - 1).path.at(m_Paths.at(m_Paths.size() - 1).path.size() - 2);
-	//start = graph.GetIndex(newStart->id);
+	OutputPathToConsole(m_Paths.at(m_Paths.size() - 3).path);
+	OutputToCSVFile("ARA*", m_Paths.at(m_Paths.size() - 3).startPointIndex, m_Paths.at(m_Paths.size() - 3).endPointIndex, timeTaken, m_Paths.at(m_Paths.size() - 3).opendedNodes->size(), m_Paths.at(m_Paths.size() - 3).eValue);
+
+	OutputPathToConsole(m_Paths.at(m_Paths.size() - 2).path);
+	OutputToCSVFile("ARA*", m_Paths.at(m_Paths.size() - 2).startPointIndex, m_Paths.at(m_Paths.size() - 2).endPointIndex, timeTaken, m_Paths.at(m_Paths.size() - 2).opendedNodes->size(), m_Paths.at(m_Paths.size() - 2).eValue);
+
+	OutputPathToConsole(m_Paths.at(m_Paths.size() - 1).path);
+	OutputToCSVFile("ARA*", m_Paths.at(m_Paths.size() - 1).startPointIndex, m_Paths.at(m_Paths.size() - 1).endPointIndex, timeTaken, m_Paths.at(m_Paths.size() - 1).opendedNodes->size(), m_Paths.at(m_Paths.size() - 1).eValue);
 
 	while (start != end)
 	{
@@ -287,28 +309,27 @@ void CoreLoop::RunARAStar(Graph graph)
 			break;
 		}
 
-
-		m_Paths.push_back(AlgorithimPath(start, end));
-
 		clock.restart();
 
 		graph.araStar(graph.nodes.at(start), graph.nodes.at(end), start, end, m_Paths);
+
 		timeTaken = clock.getElapsedTime().asMilliseconds();
 
 		std::cout << "START : " << start << std::endl;
 		std::cout << "END : " << end << std::endl;
 
+		OutputPathToConsole(m_Paths.at(m_Paths.size() - 3).path);
+		OutputToCSVFile("ARA*", m_Paths.at(m_Paths.size() - 3).startPointIndex, m_Paths.at(m_Paths.size() - 3).endPointIndex, timeTaken, m_Paths.at(m_Paths.size() - 3).opendedNodes->size(), m_Paths.at(m_Paths.size() - 3).eValue);
+
+		OutputPathToConsole(m_Paths.at(m_Paths.size() - 2).path);
+		OutputToCSVFile("ARA*", m_Paths.at(m_Paths.size() - 2).startPointIndex, m_Paths.at(m_Paths.size() - 2).endPointIndex, timeTaken, m_Paths.at(m_Paths.size() - 2).opendedNodes->size(), m_Paths.at(m_Paths.size() - 2).eValue);
+
 		OutputPathToConsole(m_Paths.at(m_Paths.size() - 1).path);
 		OutputToCSVFile("ARA*", m_Paths.at(m_Paths.size() - 1).startPointIndex, m_Paths.at(m_Paths.size() - 1).endPointIndex, timeTaken, m_Paths.at(m_Paths.size() - 1).opendedNodes->size(), m_Paths.at(m_Paths.size() - 1).eValue);
 
+		output->logNewLine();
 	}
 
-	//graph.araStar(graph.nodes.at(start), graph.nodes.at(end),start,end, m_Paths);
-	//for (int i = index; i < m_Paths.size(); i++)
-	//{
-	//	OutputPathToConsole(m_Paths.at(i).path);
-	//	OutputToCSVFile("ARA*", m_Paths.at(i).startPointIndex, m_Paths.at(i).endPointIndex, timeTaken, m_Paths.at(i).opendedNodes->size(), m_Paths.at(i).eValue);
-	//}
 	displayPath = true;
 	
 }
@@ -366,10 +387,10 @@ CoreLoop::CoreLoop()
 
 	output->firstLog();
 
-	//RunAStar(graph);
-	//RunFRAStar(graph);
-	//RunGFRAStar(graph);
-	RunARAStar(graph);
+	RunAStar(graph);
+	RunFRAStar(graph);
+	RunGFRAStar(graph);
+	//RunARAStar(graph);
 	//RunIARAStar(graph);
 }
 

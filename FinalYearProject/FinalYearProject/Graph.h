@@ -60,9 +60,9 @@ public:
 	void ucs(Node* pStart, Node* pDest, std::vector<Node *>& path);
 	int GetManhattanDistance(int xPosOne, int yPosOne, int xPosTwo, int yPosTwo);
 	void aStar(Node* pStart, Node* pDest, std::vector<Node *>& path, std::vector<int> * openedNodes);
-	bool fraStar(Node* pStart, Node* pDest, std::vector<Node *>& path);
+	bool fraStar(Node* pStart, Node* pDest, std::vector<AlgorithimPath>& paths);
 	void fraStarInitializeState(Node * currentNode, int currentIteration);
-	bool fraComputeCostMinimalPath(std::vector<Node*> open, int currentIteration ,Node* start, Node* goal, std::vector<Node *>& path);
+	bool fraComputeCostMinimalPath(std::vector<Node*> open, int currentIteration ,Node* start, Node* goal, std::vector<Node *>& path, std::vector<int> * openedNodes);
 	void fraStep2(Node * start, Node * prevStart, std::vector<Node*> open);
 	void fraStep4(std::vector<Node*> open, Node * start, int currentIteration);
 	bool TestClosedList(Node *current, Node * start);
@@ -75,7 +75,7 @@ public:
 	bool NodeInVector(Node* node ,std::vector<Node*> nodeVector);
 	int NodeInVectorIndex(Node* node, std::vector<Node*> nodeVector);
 
-	bool gfraStar(Node* pStart, Node* pDest, std::vector<Node *>& path);
+	bool gfraStar(Node* pStart, Node* pDest,  std::vector<AlgorithimPath>& paths);
 	void gfraStep2(Node * start, Node * prevStart, std::vector<Node*> open, std::vector<Node*>& deleted);
 	void gfraStep4(std::vector<Node*>& open, Node * start, int currentIteration, std::vector<Node*>& deleted);
 
