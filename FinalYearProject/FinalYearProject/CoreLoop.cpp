@@ -242,6 +242,23 @@ void CoreLoop::RunGFRAStar(Graph graph)
 	OutputPathToConsole(m_Paths.at(m_Paths.size() - 1).path);
 }
 
+void CoreLoop::RunIARAStar(Graph graph)
+{
+	int start = STARTPOINT;
+	int end = ENDPOINT;
+
+	m_Paths.push_back(AlgorithimPath(start, end));
+	int index = m_Paths.size();
+	graph.iaraStar(graph.nodes.at(start), graph.nodes.at(end), m_Paths);
+	for (int i = index; i < m_Paths.size(); i++)
+	{
+		std::cout << "New Path " << " e:" << m_Paths.at(i).eValue << std::endl;
+		std::cout << "" << std::endl;
+		OutputPathToConsole(m_Paths.at(i).path);
+	}
+	displayPath = true;
+}
+
 void CoreLoop::RunARAStar(Graph graph)
 {
 	int start = STARTPOINT;
@@ -312,8 +329,8 @@ CoreLoop::CoreLoop()
 	//RunAStar(graph);
 	//RunFRAStar(graph);
 	//RunGFRAStar(graph);
-	RunARAStar(graph);
-
+	//RunARAStar(graph);
+	RunIARAStar(graph);
 }
 
 CoreLoop::~CoreLoop()

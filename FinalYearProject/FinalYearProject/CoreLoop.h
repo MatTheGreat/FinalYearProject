@@ -30,6 +30,7 @@ public:
 	void RunFRAStar(Graph graph);
 	void RunGFRAStar(Graph graph);
 	void RunARAStar(Graph graph);
+	void RunIARAStar(Graph graph);
 	bool IsObstacle(int column, int row);
 	bool IsObstacle(int index);
 

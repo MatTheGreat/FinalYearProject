@@ -938,62 +938,67 @@ void Graph::araImprovePath(Node * pStart, Node * pDest, std::vector<Node*>& path
 
 //The v-value v(s) is the gvalue at the time of the last expansion of cell s. Initially, it is infinity.
 
-bool Graph::iaraStarImprovePath(Node * pStart, Node * pDest, std::vector<Node*>& path, std::vector<Node*>& open, std::vector<Node*>& incons, int e)
+bool Graph::iaraStarImprovePath(Node * pStart, Node * pDest, std::vector<Node*>& path, std::vector<Node*>& open, std::vector<Node*>& incons, int e, std::vector<int> * openedNodes)
 {
 	// function ImprovePath()
-	Node* current;
-	current = GetLowestFValue(open, e);
-	int index = GetLowestFValueIndex(open, e);
-
-	while (fValue(pDest, e) > fValue(current, e))
+	if (open.size() != 0)
 	{
+		Node* current;
 		current = GetLowestFValue(open, e);
 		int index = GetLowestFValueIndex(open, e);
-		std::swap(open.at(index), open.back());
-		open.pop_back();
-		int indexInNodes = NodeInVectorIndex(current, nodes);
-		nodes.at(indexInNodes)->vValue = nodes.at(indexInNodes)->weight;
-		current->m_marked = true;
 
-		std::list<Arc>::const_iterator iter = current->m_arcList.begin();
-		std::list<Arc>::const_iterator endIter = current->m_arcList.end();
-
-		for (; iter != endIter; iter++)
+		while (fValue(pDest, e) > fValue(current, e))
 		{
-			if (iter->getDestNode()->weight > (current->vValue + iter->getWeight()))
+			current = GetLowestFValue(open, e);
+			int index = GetLowestFValueIndex(open, e);
+			std::swap(open.at(index), open.back());
+			open.pop_back();
+			int indexInNodes = NodeInVectorIndex(current, nodes);
+			nodes.at(indexInNodes)->vValue = nodes.at(indexInNodes)->weight;
+			current->m_marked = true;
+
+			openedNodes->push_back(GetIndex(current->id));
+			std::list<Arc>::const_iterator iter = current->m_arcList.begin();
+			std::list<Arc>::const_iterator endIter = current->m_arcList.end();
+
+			for (; iter != endIter; iter++)
 			{
-				iter->getDestNode()->weight = current->vValue + iter->getWeight();
-				iter->getDestNode()->m_previous = current;
-				if (iter->getDestNode()->m_marked == false)
+				if (iter->getDestNode()->weight > (current->vValue + iter->getWeight()))
 				{
-					if (NodeInVector(iter->getDestNode(), open) == false && NodeInVector(iter->getDestNode(), incons))
+					iter->getDestNode()->weight = current->vValue + iter->getWeight();
+					iter->getDestNode()->m_previous = current;
+					iter->getDestNode()->previousIndex = indexInNodes;
+					if (iter->getDestNode()->m_marked == false)
 					{
-						open.push_back(iter->getDestNode());
+						if (NodeInVector(iter->getDestNode(), open) == false && NodeInVector(iter->getDestNode(), incons)==false)
+						{
+							open.push_back(iter->getDestNode());
+						}
 					}
-				}
-				else
-				{
-					iter->getDestNode()->m_marked = false;
-					incons.push_back(iter->getDestNode());
+					else
+					{
+						iter->getDestNode()->m_marked = false;
+						incons.push_back(iter->getDestNode());
+					}
 				}
 			}
 		}
-	}
-	if (pDest->weight == std::numeric_limits<int>::max() - 10000)
-	{
-		return false;
-	}
-	else
-	{
-		path.clear();
-		Node* temp = pDest;
-		path.push_back(pDest);
-		while (temp != pStart)
+		if (pDest->weight == std::numeric_limits<int>::max() - 10000)
 		{
-			temp = nodes.at(temp->previousIndex);
-			path.push_back(temp);
+			return false;
 		}
-		return true;
+		else
+		{
+			path.clear();
+			Node* temp = pDest;
+			path.push_back(pDest);
+			while (temp != pStart)
+			{
+				temp = nodes.at(temp->previousIndex);
+				path.push_back(temp);
+			}
+			return true;
+		}
 	}
 		// while g(sgoal) + e × h(sgoal, sgoal) > mins∈OPEN(g(s) + e × h(s, sgoal))
 			// move s in OPEN with the smallest g(s) + e × h(s, sgoal) from OPEN to CLOSED;
@@ -1013,11 +1018,13 @@ bool Graph::iaraStarImprovePath(Node * pStart, Node * pDest, std::vector<Node*>&
 		// return true;
 }
 
-bool Graph::iaraStarComputePath(Node * pStart, Node * pDest, std::vector<Node*>& path, std::vector<Node*>& open, std::vector<Node*>& incons, int e)
+bool Graph::iaraStarComputePath(Node * pStart, Node * pDest, std::vector<AlgorithimPath>& paths, std::vector<Node*>& open, std::vector<Node*>& incons, int e)
 {
 	while (true)
 	{
-		if (iaraStarImprovePath(pStart, pDest, path, open, incons, e) == false)
+		paths.push_back(AlgorithimPath(NodeInVector(pStart,nodes), NodeInVector(pStart, nodes)));
+		paths.at(paths.size() - 1).eValue = e;
+		if (iaraStarImprovePath(pStart, pDest, paths.at(paths.size() - 1).path, open, incons, e, paths.at(paths.size() - 1).opendedNodes) == false)
 		{
 			return false;
 		}
@@ -1169,7 +1176,7 @@ void Graph::iaraStarStep4(Node* goal, std::vector<Node*> open, int e, int emax)
 		// e = max(1, e − δe);
 }
 
-bool Graph::iaraStar(Node * pStart, Node * pDest)
+bool Graph::iaraStar(Node * pStart, Node * pDest, std::vector<AlgorithimPath>& paths)
 {
 	ResetGraph();
 	setHeuristic(pStart,pDest);
@@ -1177,7 +1184,6 @@ bool Graph::iaraStar(Node * pStart, Node * pDest)
 	std::vector<Node*> open;
 	std::vector<Node*> incons;
 	std::vector<Node*> deleted;
-	std::vector<Node*> path;
 	Node * start = pStart;
 	Node * prevStart = pStart;
 	Node * goal = pDest;
@@ -1186,7 +1192,8 @@ bool Graph::iaraStar(Node * pStart, Node * pDest)
 
 	while (start != goal)
 	{
-		if (iaraStarComputePath(pStart,pDest,path,open,incons,e) == false)
+
+		if (iaraStarComputePath(start,goal, paths,open,incons,e) == false)
 		{
 			return false;
 		}
@@ -1199,10 +1206,11 @@ bool Graph::iaraStar(Node * pStart, Node * pDest)
 		}
 		else
 		{
-			int pathIndex = path.size() - 2;
+			int pathIndex = paths.at(paths.size() - 1).path.size() - 1;
 			//set new start
 			pathIndex--;
-			start = path.at(pathIndex);
+			//std::cout << "New Start : " << paths.at(paths.size() - 1).path.at(pathIndex)->id << std::endl;
+			start = paths.at(paths.size() - 1).path.at(pathIndex);
 		}
 		//set new goal
 		goal;
