@@ -13,7 +13,7 @@ class AlgorithimPath
 {
 public:
 	AlgorithimPath();
-	AlgorithimPath(int startIndex, int endIndex);
+	AlgorithimPath(int startIndex, int endIndex, std::string type);
 	~AlgorithimPath();
 	bool DisplayPath(int & pathIndex, Graph & graph, MapDisplay & display);
 
@@ -24,6 +24,8 @@ public:
 	std::vector<Node *> path;
 	bool displayStarted;
 	int eValue;
+	int timeTaken;
+	std::string m_type;
 private:
 
 };

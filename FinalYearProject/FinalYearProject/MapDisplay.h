@@ -10,6 +10,7 @@ public:
 
 	void Render(sf::RenderWindow* window);
 	void ChangeTile(int index, std::string tileType);
+	void UpdateText(std::string algorithim, std::string heuristic);
 	std::vector<sf::Sprite*>* getTiles();
 
 private:
@@ -20,4 +21,7 @@ private:
 	sf::Texture greenTile;
 	sf::Texture yellowTile;
 	sf::Texture greyTile;
+	sf::Text algorithimInfoTxt;
+	sf::Font* font;
+	
 };

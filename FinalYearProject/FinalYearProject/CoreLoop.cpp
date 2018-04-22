@@ -8,7 +8,7 @@ void CoreLoop::RunAStar(Graph graph)
 	int end = ENDPOINT;
 	
 
-	m_Paths.push_back(AlgorithimPath(start, end));
+	m_Paths.push_back(AlgorithimPath(start, end,"A*"));
 
 	// Now traverse the graph.
 	clock.restart();
@@ -18,14 +18,14 @@ void CoreLoop::RunAStar(Graph graph)
 	timeTaken = clock.getElapsedTime().asMilliseconds();
 
 	OutputPathToConsole(m_Paths.at(m_Paths.size() - 1).path);
-	OutputToCSVFile("A*",m_Paths.at(m_Paths.size() - 1).startPointIndex, m_Paths.at(m_Paths.size() - 1).endPointIndex, timeTaken, m_Paths.at(m_Paths.size() - 1).opendedNodes->size(),0);
+	OutputToCSVFile("A*",graph.nodes.at(m_Paths.at(m_Paths.size() - 1).startPointIndex)->id, graph.nodes.at(m_Paths.at(m_Paths.size() - 1).endPointIndex)->id, timeTaken, m_Paths.at(m_Paths.size() - 1).opendedNodes->size(),0, m_Paths.at(m_Paths.size() - 1).path.size());
 
 	Node * newStart = m_Paths.at(m_Paths.size() - 1).path.at(m_Paths.at(m_Paths.size() - 1).path.size() - 2);
 	start = graph.GetIndex(newStart->id);
 
 	while (start != end)
 	{
-		m_Paths.push_back(AlgorithimPath(start, end));
+		m_Paths.push_back(AlgorithimPath(start, end,"A*"));
 
 		clock.restart();
 
@@ -36,7 +36,7 @@ void CoreLoop::RunAStar(Graph graph)
 		std::cout << "END : " << end << std::endl;
 
 		OutputPathToConsole(m_Paths.at(m_Paths.size() - 1).path);
-		OutputToCSVFile("A*",m_Paths.at(m_Paths.size() - 1).startPointIndex, m_Paths.at(m_Paths.size() - 1).endPointIndex, timeTaken, m_Paths.at(m_Paths.size() - 1).opendedNodes->size(),0);
+		OutputToCSVFile("A*", graph.nodes.at(m_Paths.at(m_Paths.size() - 1).startPointIndex)->id, graph.nodes.at(m_Paths.at(m_Paths.size() - 1).endPointIndex)->id, timeTaken, m_Paths.at(m_Paths.size() - 1).opendedNodes->size(),0, m_Paths.at(m_Paths.size() - 1).path.size());
 
 		Node * newStart = m_Paths.at(m_Paths.size() - 1).path.at(m_Paths.at(m_Paths.size() - 1).path.size() - 2);
 		start = graph.GetIndex(newStart->id);
@@ -57,9 +57,9 @@ void CoreLoop::OutputPathToConsole(std::vector<Node *> path)
 	}
 }
 
-void CoreLoop::OutputToCSVFile(std::string algorithim, int startPoint, int endPoint, int timeTaken, int nodesOpened, int eValue)
+void CoreLoop::OutputToCSVFile(std::string algorithim,std::string startPoint, std::string endPoint, int timeTaken, int nodesOpened, int eValue, int pathLength)
 {
-	output->LogData(algorithim, startPoint, endPoint, timeTaken, nodesOpened, eValue);
+	output->LogData(algorithim, startPoint, endPoint, timeTaken, nodesOpened, eValue,pathLength);
 }
 
 void CoreLoop::DisplayPath()
@@ -68,6 +68,16 @@ void CoreLoop::DisplayPath()
 	{
 		if (m_Paths.at(pathIndex).displayStarted == false)
 		{
+			std::string eTxt;
+			if (m_Paths.at(pathIndex).eValue != 0)
+			{
+				eTxt = "E:" + std::to_string(m_Paths.at(pathIndex).eValue);
+			}
+			else
+			{
+				eTxt = "";
+			}
+			display.UpdateText(m_Paths.at(pathIndex).m_type, eTxt);
 			for (int i = 0; i < display.getTiles()->size(); i++)
 			{
 				if (IsObstacle(i) == true)
@@ -84,7 +94,7 @@ void CoreLoop::DisplayPath()
 
 			m_Paths.at(pathIndex).displayStarted = true;
 		}
-		if (displayTimer > 5)
+		if (displayTimer > 0)
 		{
 			if (m_Paths.at(pathIndex).DisplayPath(pathIndex, graph, display) == true)
 			{
@@ -129,13 +139,61 @@ void CoreLoop::GenerateMap()
 	obstcles.push_back(std::pair<int, int>(6, 5));
 	obstcles.push_back(std::pair<int, int>(9, 6));
 
+	obstcles.push_back(std::pair<int, int>(14, 14));
+	obstcles.push_back(std::pair<int, int>(14, 15));
+	obstcles.push_back(std::pair<int, int>(15, 16));
+	obstcles.push_back(std::pair<int, int>(15, 17));
+
+	obstcles.push_back(std::pair<int, int>(21, 25));
+	obstcles.push_back(std::pair<int, int>(22, 25));
+	obstcles.push_back(std::pair<int, int>(21, 24));
+
+	obstcles.push_back(std::pair<int, int>(31, 16));
+	obstcles.push_back(std::pair<int, int>(31, 17));
+
+	obstcles.push_back(std::pair<int, int>(32, 16));
+	obstcles.push_back(std::pair<int, int>(32, 17));
+	obstcles.push_back(std::pair<int, int>(33, 16));
+
+	obstcles.push_back(std::pair<int, int>(15, 37));
+	obstcles.push_back(std::pair<int, int>(16, 37));
+	obstcles.push_back(std::pair<int, int>(17, 37));
+	obstcles.push_back(std::pair<int, int>(15, 38));
+	obstcles.push_back(std::pair<int, int>(16, 38));
+	obstcles.push_back(std::pair<int, int>(17, 38));
+
+	obstcles.push_back(std::pair<int, int>(28, 45));
+	obstcles.push_back(std::pair<int, int>(27, 45));
+	obstcles.push_back(std::pair<int, int>(28, 46));
+
+	obstcles.push_back(std::pair<int, int>(21, 26));
+	obstcles.push_back(std::pair<int, int>(22, 25));
+	obstcles.push_back(std::pair<int, int>(21, 25));
+	obstcles.push_back(std::pair<int, int>(23, 26));
+	obstcles.push_back(std::pair<int, int>(24, 25));
+	obstcles.push_back(std::pair<int, int>(25, 26));
+	obstcles.push_back(std::pair<int, int>(25, 27));
+
+	obstcles.push_back(std::pair<int, int>(42, 34));
+	obstcles.push_back(std::pair<int, int>(45, 25));
+	obstcles.push_back(std::pair<int, int>(49, 16));
+	obstcles.push_back(std::pair<int, int>(41, 47));
+	obstcles.push_back(std::pair<int, int>(43, 8));
+	obstcles.push_back(std::pair<int, int>(38, 6));
+	obstcles.push_back(std::pair<int, int>(18, 37));
+
+	obstcles.push_back(std::pair<int, int>(36, 12));
+	obstcles.push_back(std::pair<int, int>(36, 15));
+
+	obstcles.push_back(std::pair<int, int>(39, 16));
+
 
 	std::string temp;
 	std::ifstream myfile;
 	int index = 0;
-	for (int r = 0; r < 16; r++)
+	for (int r = 0; r < 50; r++)
 	{
-		for (int c = 0; c < 16; c++)
+		for (int c = 0; c < 50; c++)
 		{
 			temp = "C :" + std::to_string(r) + " R: " + std::to_string(c);
 			if (IsObstacle(c, r) == false)
@@ -152,9 +210,9 @@ void CoreLoop::GenerateMap()
 	}
 	int from, to, weight;
 
-	for (int r = 0; r < 16; r++)
+	for (int r = 0; r < 50; r++)
 	{
-		for (int c = 0; c < 16; c++)
+		for (int c = 0; c < 50; c++)
 		{
 			std::string IDstring;
 			IDstring = "C :" + std::to_string(r) + " R: " + std::to_string(c);
@@ -188,7 +246,7 @@ void CoreLoop::GenerateMap()
 						}
 					}
 				}
-				if (r < 15)
+				if (r < 49)
 				{
 					std::string destString;
 					destString = "C :" + std::to_string((r + 1)) + " R: " + std::to_string(c);
@@ -200,7 +258,7 @@ void CoreLoop::GenerateMap()
 						}
 					}
 				}
-				if (c < 15)
+				if (c < 49)
 				{
 					std::string destString;
 					destString = "C :" + std::to_string(r) + " R: " + std::to_string((c + 1));
@@ -228,7 +286,7 @@ void CoreLoop::RunFRAStar(Graph graph)
 	for (int i = index; i < m_Paths.size(); i++)
 	{
 		OutputPathToConsole(m_Paths.at(i).path);
-		OutputToCSVFile("FRA*", m_Paths.at(i).startPointIndex, m_Paths.at(i).endPointIndex, timeTaken, m_Paths.at(i).opendedNodes->size(), 0);
+		OutputToCSVFile("FRA*", graph.nodes.at(m_Paths.at(i).startPointIndex)->id, graph.nodes.at(m_Paths.at(i).endPointIndex)->id, m_Paths.at(i).timeTaken, m_Paths.at(i).opendedNodes->size(), 0, m_Paths.at(i).path.size());
 	}
 
 
@@ -246,7 +304,7 @@ void CoreLoop::RunGFRAStar(Graph graph)
 	for (int i = index; i < m_Paths.size(); i++)
 	{
 		OutputPathToConsole(m_Paths.at(i).path);
-		OutputToCSVFile("G-FRA*", m_Paths.at(i).startPointIndex, m_Paths.at(i).endPointIndex, timeTaken, m_Paths.at(i).opendedNodes->size(), 0);
+		OutputToCSVFile("G-FRA*", graph.nodes.at(m_Paths.at(i).startPointIndex)->id, graph.nodes.at(m_Paths.at(i).endPointIndex)->id, m_Paths.at(i).timeTaken, m_Paths.at(i).opendedNodes->size(), 0, m_Paths.at(i).path.size());
 	}
 	
 
@@ -259,7 +317,7 @@ void CoreLoop::RunIARAStar(Graph graph)
 	int start = STARTPOINT;
 	int end = ENDPOINT;
 
-	m_Paths.push_back(AlgorithimPath(start, end));
+	m_Paths.push_back(AlgorithimPath(start, end,"I-ARA*"));
 	int index = m_Paths.size();
 	graph.iaraStar(graph.nodes.at(start), graph.nodes.at(end), m_Paths);
 	for (int i = index; i < m_Paths.size(); i++)
@@ -267,7 +325,7 @@ void CoreLoop::RunIARAStar(Graph graph)
 		std::cout << "New Path " << " e:" << m_Paths.at(i).eValue << std::endl;
 		std::cout << "" << std::endl;
 		OutputPathToConsole(m_Paths.at(i).path);
-		OutputToCSVFile("I-ARA*", m_Paths.at(i).startPointIndex, m_Paths.at(i).endPointIndex, timeTaken, m_Paths.at(i).opendedNodes->size(), m_Paths.at(i).eValue);
+		OutputToCSVFile("I-ARA*", graph.nodes.at(m_Paths.at(i).startPointIndex)->id, graph.nodes.at(m_Paths.at(i).endPointIndex)->id, m_Paths.at(i).timeTaken, m_Paths.at(i).opendedNodes->size(), m_Paths.at(i).eValue, m_Paths.at(i).path.size());
 		if (m_Paths.at(i).eValue == 1)
 		{
 			output->logNewLine();
@@ -284,18 +342,16 @@ void CoreLoop::RunARAStar(Graph graph)
 	clock.restart();
 
 	graph.araStar(graph.nodes.at(start), graph.nodes.at(end), start, end, m_Paths);
-
-	timeTaken = clock.getElapsedTime().asMilliseconds();
 	
 
 	OutputPathToConsole(m_Paths.at(m_Paths.size() - 3).path);
-	OutputToCSVFile("ARA*", m_Paths.at(m_Paths.size() - 3).startPointIndex, m_Paths.at(m_Paths.size() - 3).endPointIndex, timeTaken, m_Paths.at(m_Paths.size() - 3).opendedNodes->size(), m_Paths.at(m_Paths.size() - 3).eValue);
+	OutputToCSVFile("ARA*", graph.nodes.at(m_Paths.at(m_Paths.size() - 3).startPointIndex)->id, graph.nodes.at(m_Paths.at(m_Paths.size() - 3).endPointIndex)->id, m_Paths.at(m_Paths.size() - 3).timeTaken, m_Paths.at(m_Paths.size() - 3).opendedNodes->size(), m_Paths.at(m_Paths.size() - 3).eValue, m_Paths.at(m_Paths.size() - 3).path.size());
 
 	OutputPathToConsole(m_Paths.at(m_Paths.size() - 2).path);
-	OutputToCSVFile("ARA*", m_Paths.at(m_Paths.size() - 2).startPointIndex, m_Paths.at(m_Paths.size() - 2).endPointIndex, timeTaken, m_Paths.at(m_Paths.size() - 2).opendedNodes->size(), m_Paths.at(m_Paths.size() - 2).eValue);
+	OutputToCSVFile("ARA*", graph.nodes.at(m_Paths.at(m_Paths.size() - 2).startPointIndex)->id, graph.nodes.at(m_Paths.at(m_Paths.size() - 2).endPointIndex)->id, m_Paths.at(m_Paths.size() - 2).timeTaken, m_Paths.at(m_Paths.size() - 2).opendedNodes->size(), m_Paths.at(m_Paths.size() - 2).eValue, m_Paths.at(m_Paths.size() - 2).path.size());
 
 	OutputPathToConsole(m_Paths.at(m_Paths.size() - 1).path);
-	OutputToCSVFile("ARA*", m_Paths.at(m_Paths.size() - 1).startPointIndex, m_Paths.at(m_Paths.size() - 1).endPointIndex, timeTaken, m_Paths.at(m_Paths.size() - 1).opendedNodes->size(), m_Paths.at(m_Paths.size() - 1).eValue);
+	OutputToCSVFile("ARA*", graph.nodes.at(m_Paths.at(m_Paths.size() - 1).startPointIndex)->id, graph.nodes.at(m_Paths.at(m_Paths.size() - 1).endPointIndex)->id, m_Paths.at(m_Paths.size() - 1).timeTaken, m_Paths.at(m_Paths.size() - 1).opendedNodes->size(), m_Paths.at(m_Paths.size() - 1).eValue,m_Paths.at(m_Paths.size() - 1).path.size());
 
 	while (start != end)
 	{
@@ -319,13 +375,13 @@ void CoreLoop::RunARAStar(Graph graph)
 		std::cout << "END : " << end << std::endl;
 
 		OutputPathToConsole(m_Paths.at(m_Paths.size() - 3).path);
-		OutputToCSVFile("ARA*", m_Paths.at(m_Paths.size() - 3).startPointIndex, m_Paths.at(m_Paths.size() - 3).endPointIndex, timeTaken, m_Paths.at(m_Paths.size() - 3).opendedNodes->size(), m_Paths.at(m_Paths.size() - 3).eValue);
+		OutputToCSVFile("ARA*", graph.nodes.at(m_Paths.at(m_Paths.size() - 3).startPointIndex)->id, graph.nodes.at(m_Paths.at(m_Paths.size() - 3).endPointIndex)->id, m_Paths.at(m_Paths.size() - 3).timeTaken, m_Paths.at(m_Paths.size() - 3).opendedNodes->size(), m_Paths.at(m_Paths.size() - 3).eValue, m_Paths.at(m_Paths.size() - 3).path.size());
 
 		OutputPathToConsole(m_Paths.at(m_Paths.size() - 2).path);
-		OutputToCSVFile("ARA*", m_Paths.at(m_Paths.size() - 2).startPointIndex, m_Paths.at(m_Paths.size() - 2).endPointIndex, timeTaken, m_Paths.at(m_Paths.size() - 2).opendedNodes->size(), m_Paths.at(m_Paths.size() - 2).eValue);
+		OutputToCSVFile("ARA*", graph.nodes.at(m_Paths.at(m_Paths.size() - 2).startPointIndex)->id, graph.nodes.at(m_Paths.at(m_Paths.size() - 2).endPointIndex)->id, m_Paths.at(m_Paths.size() - 2).timeTaken, m_Paths.at(m_Paths.size() - 2).opendedNodes->size(), m_Paths.at(m_Paths.size() - 2).eValue, m_Paths.at(m_Paths.size() - 2).path.size());
 
 		OutputPathToConsole(m_Paths.at(m_Paths.size() - 1).path);
-		OutputToCSVFile("ARA*", m_Paths.at(m_Paths.size() - 1).startPointIndex, m_Paths.at(m_Paths.size() - 1).endPointIndex, timeTaken, m_Paths.at(m_Paths.size() - 1).opendedNodes->size(), m_Paths.at(m_Paths.size() - 1).eValue);
+		OutputToCSVFile("ARA*", graph.nodes.at(m_Paths.at(m_Paths.size() - 1).startPointIndex)->id, graph.nodes.at(m_Paths.at(m_Paths.size() - 1).endPointIndex)->id, m_Paths.at(m_Paths.size() - 1).timeTaken, m_Paths.at(m_Paths.size() - 1).opendedNodes->size(), m_Paths.at(m_Paths.size() - 1).eValue, m_Paths.at(m_Paths.size() - 1).path.size());
 
 		output->logNewLine();
 	}
@@ -362,12 +418,12 @@ bool CoreLoop::IsObstacle(int index)
 CoreLoop::CoreLoop()
 {
 	isRunning = true;
-	window = new sf::RenderWindow(sf::VideoMode(768, 768), "Final Year Project");
+	window = new sf::RenderWindow(sf::VideoMode(800, 800), "Final Year Project");
 	window->setFramerateLimit(60.0f);
 
 
 
-	graph = Graph();
+	graph = Graph(&clock);
 
 
 	displayPath = false;
@@ -383,7 +439,7 @@ CoreLoop::CoreLoop()
 	GenerateMap();
 
 	STARTPOINT = graph.GetIndex("C :1 R: 4");
-	ENDPOINT = graph.GetIndex("C :7 R: 7");
+	ENDPOINT = graph.GetIndex("C :35 R: 35");
 
 	output->firstLog();
 

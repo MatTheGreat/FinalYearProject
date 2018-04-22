@@ -2,9 +2,9 @@
 #include <iostream>
 
 
-Graph::Graph()
+Graph::Graph(sf::Clock* timer)
 {
-
+	m_timer = timer;
 }
 
 Graph::~Graph()
@@ -353,7 +353,8 @@ bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<AlgorithimPath>& pa
 	open.push_back(start);
 	while (start != goal)
 	{
-		paths.push_back(AlgorithimPath(NodeInVectorIndex(start, nodes), NodeInVectorIndex(goal, nodes)));
+		paths.push_back(AlgorithimPath(NodeInVectorIndex(start, nodes), NodeInVectorIndex(goal, nodes),"FRA*"));
+		m_timer->restart();
 		if (fraComputeCostMinimalPath(open,iteration,start,goal, paths.at(paths.size() - 1).path, paths.at(paths.size() - 1).opendedNodes) == false)
 		{
 			//No path found
@@ -370,6 +371,7 @@ bool Graph::fraStar(Node * pStart, Node * pDest, std::vector<AlgorithimPath>& pa
 			//	}
 			//}
 		}
+		paths.at(paths.size() - 1).timeTaken = m_timer->getElapsedTime().asMilliseconds();
 		bool openListInComplete = false;
 		int pathIndex = paths.at(paths.size() - 1).path.size() - 2;
 		while (TestClosedList(goal,start))
@@ -732,7 +734,8 @@ bool Graph::gfraStar(Node * pStart, Node * pDest, std::vector<AlgorithimPath>& p
 	open.push_back(start);
 	while (start != goal)
 	{
-		paths.push_back(AlgorithimPath(NodeInVectorIndex(start,nodes), NodeInVectorIndex(goal,nodes)));
+		paths.push_back(AlgorithimPath(NodeInVectorIndex(start,nodes), NodeInVectorIndex(goal,nodes),"G-FRA*"));
+		m_timer->restart();
 		if (fraComputeCostMinimalPath(open, iteration, start, goal, paths.at(paths.size() - 1).path, paths.at(paths.size() - 1).opendedNodes) == false)
 		{
 			//No path found
@@ -749,6 +752,7 @@ bool Graph::gfraStar(Node * pStart, Node * pDest, std::vector<AlgorithimPath>& p
 			//	}
 			//}
 		}
+		paths.at(paths.size() - 1).timeTaken = m_timer->getElapsedTime().asMilliseconds();
 		bool openListInComplete = false;
 		int pathIndex = paths.at(paths.size() - 1).path.size() - 2;
 		while (TestClosedList(goal, start))
@@ -843,9 +847,11 @@ void Graph::araStar(Node * pStart, Node * pDest,int startPoint, int endPoint, st
 	float e = 3.0f;
 	pStart->weight = 0;
 	open.push_back(pStart);
-	paths.push_back(AlgorithimPath(startPoint, endPoint));
+	paths.push_back(AlgorithimPath(startPoint, endPoint,"ARA*"));
 	paths.at(paths.size() - 1).eValue = e;
+	m_timer->restart();
 	araImprovePath(pStart, pDest, paths.at(paths.size()-1).path, open, incons, e, paths.at(paths.size() - 1).opendedNodes);
+	paths.at(paths.size() - 1).timeTaken = m_timer->getElapsedTime().asMilliseconds();
 
 	while (e > 1)
 	{
@@ -858,9 +864,11 @@ void Graph::araStar(Node * pStart, Node * pDest,int startPoint, int endPoint, st
 		{
 			nodes.at(n)->m_marked = false;
 		}
-		paths.push_back(AlgorithimPath(startPoint, endPoint));
+		paths.push_back(AlgorithimPath(startPoint, endPoint,"ARA*"));
 		paths.at(paths.size() - 1).eValue = e;
+		m_timer->restart();
 		araImprovePath(pStart, pDest, paths.at(paths.size() - 1).path, open, incons, e, paths.at(paths.size() - 1).opendedNodes);
+		paths.at(paths.size() - 1).timeTaken = m_timer->getElapsedTime().asMilliseconds();
 	}
 }
 
@@ -1027,8 +1035,10 @@ bool Graph::iaraStarComputePath(Node * pStart, Node * pDest, std::vector<Algorit
 {
 	while (true)
 	{
-		paths.push_back(AlgorithimPath(NodeInVectorIndex(pStart,nodes), NodeInVectorIndex(pDest, nodes)));
+		
+		paths.push_back(AlgorithimPath(NodeInVectorIndex(pStart,nodes), NodeInVectorIndex(pDest, nodes),"I-ARA*"));
 		paths.at(paths.size() - 1).eValue = e;
+		m_timer->restart();
 		if (iaraStarImprovePath(pStart, pDest, paths.at(paths.size() - 1).path, open, incons, e, paths.at(paths.size() - 1).opendedNodes) == false)
 		{
 			return false;
@@ -1044,6 +1054,7 @@ bool Graph::iaraStarComputePath(Node * pStart, Node * pDest, std::vector<Algorit
 		clearMarks();
 		incons.clear();
 		e = std::max(1, e - 1);
+		paths.at(paths.size() - 1).timeTaken = m_timer->getElapsedTime().asMilliseconds();
 	}
 }
 

@@ -8,9 +8,10 @@ AlgorithimPath::AlgorithimPath()
 	opendedNodes = new std::vector<int>();
 	path = std::vector<Node*>();
 	displayStarted = false;
+	eValue = 0;
 }
 
-AlgorithimPath::AlgorithimPath(int startIndex, int endIndex)
+AlgorithimPath::AlgorithimPath(int startIndex, int endIndex, std::string type)
 {
 	startPointIndex = startIndex;
 	endPointIndex = endIndex;
@@ -18,6 +19,8 @@ AlgorithimPath::AlgorithimPath(int startIndex, int endIndex)
 	opendedNodes = new std::vector<int>();
 	path = std::vector<Node*>();
 	displayStarted = false;
+	m_type = type;
+	eValue = 0;
 }
 
 AlgorithimPath::~AlgorithimPath()

@@ -42,13 +42,14 @@ public:
 class Graph
 {
 private:
-	
+	sf::Clock* m_timer;
 
 public:
 
 	std::vector<Node*> nodes;
 
-	Graph();
+	Graph() {};
+	Graph(sf::Clock* timer);
 	~Graph();
 
 	bool addNode(int data, std::string id, int displayIndex, std::pair<int, int> position);

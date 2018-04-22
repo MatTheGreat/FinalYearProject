@@ -9,16 +9,23 @@ MapDisplay::MapDisplay()
 	yellowTile.loadFromFile("TileYellow.png");
 	greyTile.loadFromFile("TileGrey.png");
 
-	for (int r = 0; r< 16; r++)
+	for (int r = 0; r< 50; r++)
 	{
-		for (int c = 0; c < 16; c++)
+		for (int c = 0; c < 50; c++)
 		{
 			sf::Sprite * sp = new sf::Sprite();
 			sp->setTexture(whiteTile);
-			sp->setPosition((r * 48), (c * 48));
+			sp->setPosition((r * 16), (c * 16));
 			tiles.push_back(sp);
 		}
 	}
+	font = new sf::Font();
+	font->loadFromFile("arial.ttf");
+	algorithimInfoTxt = sf::Text("",*font);
+	algorithimInfoTxt.setFillColor(sf::Color::Red);
+	algorithimInfoTxt.setStyle(sf::Text::Bold);
+	algorithimInfoTxt.setCharacterSize(20);
+	algorithimInfoTxt.setPosition(600, 10);
 }
 
 MapDisplay::~MapDisplay()
@@ -32,6 +39,7 @@ void MapDisplay::Render(sf::RenderWindow * window)
 	{
 		window->draw(*tiles.at(i));
 	}
+	window->draw(algorithimInfoTxt);
 }
 
 void MapDisplay::ChangeTile(int index ,std::string tileType)
@@ -60,6 +68,11 @@ void MapDisplay::ChangeTile(int index ,std::string tileType)
 	{
 		tiles.at(index)->setTexture(whiteTile);
 	}
+}
+
+void MapDisplay::UpdateText(std::string algorithim, std::string heuristic)
+{
+	algorithimInfoTxt.setString(algorithim + " " + heuristic);
 }
 
 std::vector<sf::Sprite*>* MapDisplay::getTiles()

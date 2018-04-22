@@ -1,14 +1,2 @@
-﻿  CoreLoop.cpp
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(62): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(67): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(71): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(153): warning C4101: 'from': unreferenced local variable
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(153): warning C4101: 'to': unreferenced local variable
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(153): warning C4101: 'weight': unreferenced local variable
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(228): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(246): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(265): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(339): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(351): warning C4018: '<': signed/unsigned mismatch
-c:\users\matthew\desktop\new folder (12)\finalyearproject\finalyearproject\finalyearproject\coreloop.cpp(366): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+﻿  Outputter.cpp
   FinalYearProject.vcxproj -> C:\Users\Matthew\Desktop\New folder (12)\FinalYearProject\FinalYearProject\Debug\FinalYearProject.exe
