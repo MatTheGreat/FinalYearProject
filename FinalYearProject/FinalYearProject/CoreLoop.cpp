@@ -390,8 +390,8 @@ CoreLoop::CoreLoop()
 	RunAStar(graph);
 	RunFRAStar(graph);
 	RunGFRAStar(graph);
-	//RunARAStar(graph);
-	//RunIARAStar(graph);
+	RunARAStar(graph);
+	RunIARAStar(graph);
 }
 
 CoreLoop::~CoreLoop()
