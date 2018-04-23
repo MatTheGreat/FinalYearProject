@@ -58,7 +58,7 @@ public:
 	void removeArc(int from, int to);
 	Arc* getArc(int from, int to);
 	void clearMarks();
-	void ucs(Node* pStart, Node* pDest, std::vector<Node *>& path);
+	// Gets Distance between two Nodes
 	int GetManhattanDistance(int xPosOne, int yPosOne, int xPosTwo, int yPosTwo);
 	void aStar(Node* pStart, Node* pDest, std::vector<Node *>& path, std::vector<int> * openedNodes);
 	bool fraStar(Node* pStart, Node* pDest, std::vector<AlgorithimPath>& paths);

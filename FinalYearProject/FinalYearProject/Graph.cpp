@@ -158,76 +158,7 @@ int Graph::GetIndex(std::string id)
 	return -1;
 }
 
-void Graph::ucs(Node * pStart, Node * pDest, std::vector<Node*>& path)
-{
-	if (pStart != 0)
-	{
-		for (int index = 0; index < nodes.size(); index++) 
-		{
-			if (nodes.at(index) != nullptr) 
-			{
-				nodes.at(index)->weight = std::numeric_limits<int>::max() - 10000;
-			}
-		}
-		bool foundPath = false;
-		std::priority_queue<Node*, std::vector<Node*>, NodeSearchCostComparer> nodeQueue;
-		nodeQueue.push(pStart);
-		pStart->m_marked = true;
-		pStart->weight = 0;
-		while (nodeQueue.size() != 0 && nodeQueue.top() != pDest)
-		{
-			std::list<Arc>::const_iterator iter = nodeQueue.top()->m_arcList.begin();
-			std::list<Arc>::const_iterator endIter = nodeQueue.top()->m_arcList.end();
-			for (; iter != endIter; iter++)
-			{
-				if ((*iter).getDestNode() != nodeQueue.top())
-				{
-					int dist = nodeQueue.top()->weight + iter->getWeight();
-
-					if ((*iter).getDestNode()->m_marked == false)
-					{
-						// mark the node and add it to the queue.
-						(*iter).getDestNode()->m_previous = nodeQueue.top();
-						if (dist < (*iter).getDestNode()->weight)
-						{
-							(*iter).getDestNode()->weight = dist;
-						}
-						(*iter).getDestNode()->m_marked = true;
-						nodeQueue.push((*iter).getDestNode());
-					}
-					if (dist < (*iter).getDestNode()->weight)
-					{
-						(*iter).getDestNode()->weight = dist;
-						(*iter).getDestNode()->m_previous = nodeQueue.top();
-					}
-					if ((*iter).getDestNode() == pDest)
-					{
-						if (dist <= (*iter).getDestNode()->weight)
-						{
-							(*iter).getDestNode()->weight = dist;
-							(*iter).getDestNode()->m_previous = nodeQueue.top();
-							if (foundPath == true)
-							{
-								path.clear();
-							}
-							Node* temp = (*iter).getDestNode();
-							path.push_back((*iter).getDestNode());
-							while (temp != pStart)
-							{
-								temp = temp->m_previous;
-								path.push_back(temp);
-							}
-							foundPath = true;
-						}
-					}
-
-				}
-			}
-			nodeQueue.pop();
-		}
-	}
-}
-
+// Gets Distance between two Nodes
 int Graph::GetManhattanDistance(int xPosOne, int yPosOne, int xPosTwo, int yPosTwo)
 {
 	int length;
@@ -241,7 +172,9 @@ void Graph::setHeuristic(Node * pStart, Node * pDest)
 
 	for (int i = 0; i < nodes.size(); i++)
 	{
+		
 		nodes.at(i)->weight = GetManhattanDistance(pDest->m_position.first, pDest->m_position.second, nodes.at(i)->m_position.first, nodes.at(i)->m_position.second);
+		//Set Heuritic based on Manhattan Distance 
 		nodes.at(i)->m_estDistToDest = nodes.at(i)->weight*0.9f;
 		nodes.at(i)->weight = std::numeric_limits<int>::max() - 10000;
 		std::cout << nodes.at(i)->id << " " << nodes.at(i)->m_estDistToDest << std::endl;
@@ -261,6 +194,7 @@ void Graph::aStar(Node * pStart, Node * pDest, std::vector<Node*>& path , std::v
 
 	if (pStart != 0)
 	{
+		//Calulate Heuristic
 		setHeuristic(pStart,pDest);
 		std::priority_queue<Node*, std::vector<Node*>, NodeSearchEstimateComparer> nodeQueue;
 
@@ -272,9 +206,10 @@ void Graph::aStar(Node * pStart, Node * pDest, std::vector<Node*>& path , std::v
 		while (nodeQueue.size() != 0 && nodeQueue.top() != pDest)
 		{
 			openedNodes->push_back(GetIndex(nodeQueue.top()->id));
+			
 			std::list<Arc>::const_iterator iter = nodeQueue.top()->m_arcList.begin();
 			std::list<Arc>::const_iterator endIter = nodeQueue.top()->m_arcList.end();
-
+			//Go through all of neighbouring nodes
 			for (; iter != endIter; iter++)
 			{
 				if ((*iter).getDestNode()->m_previous != nodeQueue.top())
@@ -841,32 +776,48 @@ void Graph::gfraStep4(std::vector<Node*>& open, Node * start, int currentIterati
 void Graph::araStar(Node * pStart, Node * pDest,int startPoint, int endPoint, std::vector<AlgorithimPath>& paths)
 {
 	ResetGraph();
+	//Set Intial Heuristic
 	setHeuristic(pStart,pDest);
+
 	std::vector<Node*> open;
 	std::vector<Node*> incons;
+
+	//Set Inflated Heuristic Value
 	float e = 3.0f;
+
+	//Intial first node
 	pStart->weight = 0;
 	open.push_back(pStart);
+
+	//Set up path variables
 	paths.push_back(AlgorithimPath(startPoint, endPoint,"ARA*"));
 	paths.at(paths.size() - 1).eValue = e;
+
 	m_timer->restart();
+	//Run Improve Path
 	araImprovePath(pStart, pDest, paths.at(paths.size()-1).path, open, incons, e, paths.at(paths.size() - 1).opendedNodes);
 	paths.at(paths.size() - 1).timeTaken = m_timer->getElapsedTime().asMilliseconds();
 
 	while (e > 1)
 	{
+		//Reduce value of inflation on heuristic
 		e--;
 		for (int i = 0; i < incons.size(); i++)
 		{
+			//add any inconsistant nodes to open
 			open.push_back(incons.at(i));
 		}
 		for (int n = 0; n < nodes.size(); n++)
 		{
+			//set all nodes to having not been visited
 			nodes.at(n)->m_marked = false;
 		}
+		//Set up path variables
 		paths.push_back(AlgorithimPath(startPoint, endPoint,"ARA*"));
 		paths.at(paths.size() - 1).eValue = e;
+
 		m_timer->restart();
+		//Run Improve Path
 		araImprovePath(pStart, pDest, paths.at(paths.size() - 1).path, open, incons, e, paths.at(paths.size() - 1).opendedNodes);
 		paths.at(paths.size() - 1).timeTaken = m_timer->getElapsedTime().asMilliseconds();
 	}
@@ -1137,6 +1088,7 @@ void Graph::iaraStarStep2(Node* start, Node* prevStart, std::vector<Node*> open,
 
 void Graph::iaraStarStep3(std::vector<Node*> deleted, std::vector<Node*> open)
 {
+	
 	for (int i = 0; i < deleted.size(); i++)
 	{
 		std::list<Arc>::const_iterator iter = deleted.at(i)->m_arcList.begin();
@@ -1238,91 +1190,3 @@ bool Graph::iaraStar(Node * pStart, Node * pDest, std::vector<AlgorithimPath>& p
 	}
 	return true;
 }
-
-/*
-
-
-Current = node currently being evaluated
-OPEN = list with all nodes to be evaulated
-Pred(s) = states from previous searches
-Succ(s) = states to be passed to the next searches
-
-procedure InitializeState(current)
-	if generatediteration(current) not equal to iteration
-		g(current) = infinity
-		generatediteration(current) = iteration;
-		expanded(current) = false;
-
-function TestClosedList(current)
-	 return (s = startNode OR(expanded(s) AND parent(s) = NULL));
-
-function ComputeCostMinimalPath()
- while (OPEN not empty)
- 	current = node with smallest f(n)
-	OPEN.remove(current)
- 	expanded(current) = true;
- 	for each node in Succ(s)
- 		if (NOT TestClosedList(node))
- 		InitializeState(node);
- 		if (g(node) >g(current) + distanceFrom(current, node))
- 			g(current) = g(current) + distanceFrom(current, node);
- 			parent(node) = current;
- 			if (node not in OPEN)
- 				OPEN.add(node)
-	 if (current == goal)
-		return true;
- return false;
-
-procedure Step2()
-   parent(start) = NULL;
-for each in node in the search tree rooted at previous start but not the subtree rooted at start
- 	parent(node) = NULL;
- 	if (node in OPEN)
- 		OPEN.remove(node)
-
-
-procedure Step4()
-  for each node in graph on relevant part of outer perimeter of CLOSED list
- 	if (node not in OPEN AND neighbour in Pred(s) : TestClosedList(neighbour))
- 		OPEN.add(node)
-  for each node in OPEN
- 	InitializeState(node);
-  for each node in OPEN
- 	for each n in Pred(s)
- 		if (TestClosedList(n) AND g(node) >g(node) + distanceFrom(n, node))
- 			g(node) = g(n) + distanceFrom(n, node);
- 			parent(node) = n;
-
-
-
-function Main()
-  for each node in graph
-	 generatediteration(node) = 0;
- 	 expanded(node) = false;
- 	 parent(node) = NULL;
-   iteration = 1;
-   InitializeState(start);
-   g(start) = 0;
-   OPEN = { start };
-   while (start not equal goal)
-  	if (NOT ComputeCostMinimalPath())
- 		return false;
- 	openlist incomplete : = false;
- 	while (TestClosedList(goal))
- 		while (target is on path from start to goal and not caught)
- 			follow cost - minimal path from start to goal;
- 		if (target is caught)
- 			return true;
- 		previous start = start;
- 		start = the current state of the hunter;
- 		goal = the current state of the target;
- 		if (start = previous start)
- 			Step2();
- 			openlist incomplete = true;
- 	if (openlist incomplete)
- 		iteration = iteration + 1;
- 		Step4();
-return true;
-
-
-*/
